@@ -15,8 +15,8 @@ struct Config {
     static let itemColor = Color(red: 154/255, green: 160/255, blue: 166/255)
 }
 
-enum AppState {
+enum AppState: String, Identifiable {
     case editingTask
     
-    var id: Self { self }
+    var id: String { self.rawValue }
 }

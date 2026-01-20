@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var activeState: AppState? = nil
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -21,8 +22,18 @@ struct ContentView: View {
                     .frame(minWidth: 0)
                 
                 VStack {
-                    NewTaskButton()
-                        .position(x: geometry.size.width - 75, y: geometry.size.height - 50)
+                    NewTaskButton() {
+                        activeState = .editingTask
+                    }
+                    .position(x: geometry.size.width - 75, y: geometry.size.height - 50)
+                }
+            }
+            .sheet(item: $activeState) { state in
+                switch state {
+                case .editingTask:
+                    TaskEditBar()
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
                 }
             }
         }

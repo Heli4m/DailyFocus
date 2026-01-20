@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct NewTaskButton: View {
+    let action: () -> Void
+    
     var body: some View {
-        Button {
-            
-        } label: {
+        Button(action: action) {
             Circle()
                 .frame(width: 75, height: 75)
                 .foregroundStyle(Color(Config.itemColor))
@@ -24,8 +24,4 @@ struct NewTaskButton: View {
                 }
         }
     }
-}
-
-#Preview {
-    NewTaskButton()
 }

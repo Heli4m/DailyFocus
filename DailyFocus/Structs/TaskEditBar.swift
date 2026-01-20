@@ -25,9 +25,9 @@ struct TaskEditBar: View {
                 BasicForm(selectedtaskName: $selectedtaskName)
                 
                 HStack {
-                    WheelForm(selectedDuration: $hours, range: 0..<24, label: "hrs")
-                    WheelForm(selectedDuration: $minutes, range: 0..<60, label: "min")
-                    WheelForm(selectedDuration: $seconds, range: 0..<60, label: "sec")
+                    WheelForm(selectedDuration: $hours, range: 0..<24, label: "Hours")
+                    WheelForm(selectedDuration: $minutes, range: 0..<60, label: "Minutes")
+                    WheelForm(selectedDuration: $seconds, range: 0..<60, label: "Seconds")
                 }
             }
             .padding()
@@ -57,14 +57,16 @@ struct WheelForm: View {
     let label: String
     
     var body: some View {
-        Picker(label, selection: $selectedDuration) {
-            ForEach (0..<24, id: \.self) { duration in
-                Text("\(duration)")
+        VStack {
+            Picker(label, selection: $selectedDuration) {
+                ForEach (range, id: \.self) { duration in
+                    LexendRegularText(text: "\(duration)", size: 18)
+                }
             }
+            .pickerStyle(.wheel)
+            
+            LexendRegularText(text: "\(label)", size: 18)
         }
-        .pickerStyle(.wheel)
-        
-        Text(label)
     }
 }
 #Preview {
