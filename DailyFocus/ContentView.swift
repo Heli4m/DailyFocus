@@ -34,6 +34,7 @@ struct ContentView: View {
                     TaskEditBar()
                         .presentationDetents([.large])
                         .presentationDragIndicator(.visible)
+                        .presentationBackground(Color(Config.bgColor))
                 }
             }
         }

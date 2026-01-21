@@ -25,10 +25,16 @@ struct TaskEditBar: View {
                 BasicForm(selectedtaskName: $selectedtaskName)
                 
                 HStack {
-                    WheelForm(selectedDuration: $hours, range: 0..<24, label: "Hours")
-                    WheelForm(selectedDuration: $minutes, range: 0..<60, label: "Minutes")
-                    WheelForm(selectedDuration: $seconds, range: 0..<60, label: "Seconds")
+                    HStack {
+                        WheelForm(selectedDuration: $hours, range: 0..<24, label: "Hours")
+                        WheelForm(selectedDuration: $minutes, range: 0..<60, label: "Minutes")
+                        WheelForm(selectedDuration: $seconds, range: 0..<60, label: "Seconds")
+                    }
+                    .padding()
                 }
+                .background(Color(Config.itemColor))
+                .cornerRadius(15)
+                .padding(.top)
             }
             .padding()
         }
@@ -40,14 +46,14 @@ struct BasicForm: View {
     
     var body: some View {
         LexendRegularText(text: "Task Name:", size: 18)
+            .foregroundStyle(Color(Config.primaryText))
         TextField("New Task", text: $selectedtaskName)
             .frame(height: 50)
             .font(Font.custom("Lexend-Regular", size: 18))
             .padding(.horizontal)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color(Config.itemColor))
-            )
+            .background(Color(Config.itemColor))
+            .foregroundStyle(Config.accentColor)
+            .cornerRadius(15)
     }
 }
 
@@ -61,11 +67,13 @@ struct WheelForm: View {
             Picker(label, selection: $selectedDuration) {
                 ForEach (range, id: \.self) { duration in
                     LexendRegularText(text: "\(duration)", size: 18)
+                        .foregroundStyle(Color(Config.accentColor))
                 }
             }
             .pickerStyle(.wheel)
             
             LexendRegularText(text: "\(label)", size: 18)
+                .foregroundStyle(Config.primaryText)
         }
     }
 }
