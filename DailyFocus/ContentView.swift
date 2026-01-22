@@ -35,6 +35,7 @@ struct ContentView: View {
                         .presentationDetents([.large])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))
+                    
                 }
             }
         }

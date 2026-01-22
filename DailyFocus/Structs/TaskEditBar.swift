@@ -35,6 +35,14 @@ struct TaskEditBar: View {
                 .background(Color(Config.itemColor))
                 .cornerRadius(15)
                 .padding(.top)
+                
+                VStack (alignment: .leading) {
+                    LexendRegularText(text: "Priority Level", size: 18)
+                        .foregroundStyle(Color(Config.primaryText))
+                    PriorityDotMainView()
+                        .cornerRadius(15)
+                }
+                .padding(.top)
             }
             .padding()
         }
@@ -47,7 +55,13 @@ struct BasicForm: View {
     var body: some View {
         LexendRegularText(text: "Task Name:", size: 18)
             .foregroundStyle(Color(Config.primaryText))
-        TextField("New Task", text: $selectedtaskName)
+        TextField(
+            text: $selectedtaskName,
+            prompt: Text("New Task")
+                .foregroundStyle(Config.accentColor.opacity(0.2))
+        ) {
+            Text("Task Name")
+        }
             .frame(height: 50)
             .font(Font.custom("Lexend-Regular", size: 18))
             .padding(.horizontal)
