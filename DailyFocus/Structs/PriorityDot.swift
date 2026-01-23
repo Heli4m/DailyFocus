@@ -12,7 +12,7 @@ struct PriorityDotMainView: View {
     let gap: CGFloat = 2.5
     let leftPadding: CGFloat = 11.25
     @State var sliderXPos: CGFloat = 11.25
-    @State var selectedButton: Int = 1
+    @Binding var selectedButton: Int
     
     var body: some View {
         ZStack (alignment: .leading) {
@@ -71,8 +71,4 @@ struct PriorityDot: View {
             .frame(width: 8, height: 8)
             .foregroundStyle(dotColor)
     }
-}
-
-#Preview {
-    PriorityDotMainView()
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var activeState: AppState? = nil
+    @State private var TaskList: [TaskData] = []
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -21,6 +22,14 @@ struct ContentView: View {
                     .ignoresSafeArea()
                     .frame(minWidth: 0)
                 
+                ScrollView {
+                    VStack {
+                        ForEach(TaskList) { task in
+                            Task(width: geometry.size.width - 30, data: task)
+                        }
+                    }
+                }
+                
                 VStack {
                     NewTaskButton() {
                         activeState = .editingTask
@@ -31,7 +40,10 @@ struct ContentView: View {
             .sheet(item: $activeState) { state in
                 switch state {
                 case .editingTask:
-                    TaskEditBar()
+                    TaskEditBar() { createdTask in
+                        TaskList.append(createdTask)
+                        
+                    }
                         .presentationDetents([.large])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))

@@ -8,43 +8,69 @@
 import SwiftUI
 
 struct TaskEditBar: View {
+    @Environment(\.dismiss) var dismiss
+    var onCreate: (TaskData) -> Void
+    
     @State var selectedtaskName: String = ""
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
-    @State private var seconds: Int = 0
+    @State private var selectedPriority: Int = 1
     
     var selectedDuration: Int {
-        let hoursToSeconds = hours * 3600
-        let minutesToSeconds = minutes * 60
-        return hoursToSeconds + minutesToSeconds + seconds
+        let hoursToMinutes = hours * 60
+        return hoursToMinutes + minutes
     }
     
     var body: some View {
-        ZStack {
-            VStack (alignment: .leading) {
-                BasicForm(selectedtaskName: $selectedtaskName)
-                
-                HStack {
-                    HStack {
-                        WheelForm(selectedDuration: $hours, range: 0..<24, label: "Hours")
-                        WheelForm(selectedDuration: $minutes, range: 0..<60, label: "Minutes")
-                        WheelForm(selectedDuration: $seconds, range: 0..<60, label: "Seconds")
-                    }
-                    .padding()
-                }
-                .background(Color(Config.itemColor))
-                .cornerRadius(15)
-                .padding(.top)
-                
+        GeometryReader { geometry in
+            ZStack {
                 VStack (alignment: .leading) {
-                    LexendRegularText(text: "Priority Level", size: 18)
-                        .foregroundStyle(Color(Config.primaryText))
-                    PriorityDotMainView()
-                        .cornerRadius(15)
+                    Spacer()
+                    BasicForm(selectedtaskName: $selectedtaskName)
+                    
+                    HStack {
+                        HStack {
+                            WheelForm(selectedDuration: $hours, range: 0..<24, label: "Hours")
+                            LexendMediumText(text: ":", size: 18)
+                                .foregroundStyle(Config.accentColor)
+                            WheelForm(selectedDuration: $minutes, range: 0..<60, label: "Minutes")
+                        }
+                        .padding()
+                    }
+                    .background(Color(Config.itemColor))
+                    .cornerRadius(15)
+                    .padding(.top)
+                    
+                    VStack (alignment: .leading) {
+                        LexendRegularText(text: "Priority Level", size: 18)
+                            .foregroundStyle(Color(Config.primaryText))
+                        PriorityDotMainView(selectedButton: $selectedPriority)
+                            .cornerRadius(15)
+                    }
+                    .padding(.top)
+                    
+                    Spacer()
+                    
+                    Button {
+                        let newTask = TaskData(
+                            name: selectedtaskName,
+                            time: selectedDuration,
+                            priority: selectedPriority
+                        )
+                        onCreate(newTask)
+                        dismiss()
+                    } label: {
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundStyle(Color(Config.accentColor))
+                            .frame(width: geometry.size.width - 50, height: 40)
+                            .overlay {
+                                LexendMediumText(text: "Done", size: 18)
+                                    .foregroundStyle(Color(Config.primaryText))
+                            }
+                    }
                 }
-                .padding(.top)
+                .padding()
             }
-            .padding()
         }
     }
 }
@@ -86,11 +112,14 @@ struct WheelForm: View {
             }
             .pickerStyle(.wheel)
             
-            LexendRegularText(text: "\(label)", size: 18)
+            LexendMediumText(text: label, size: 18)
                 .foregroundStyle(Config.primaryText)
         }
     }
 }
+
 #Preview {
-    TaskEditBar()
+    TaskEditBar { task in
+        print("Preview: Created task \(task.name)")
+    }
 }
