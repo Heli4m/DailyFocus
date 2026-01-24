@@ -11,6 +11,17 @@ struct Task: View {
     let width: CGFloat
     let data: TaskData
     
+    var priorityColor: Color {
+        switch data.priority {
+        case 3:
+            return Config.highPriority
+        case 2:
+            return Config.mediumPriority
+        default:
+            return Config.accentColor
+        }
+    }
+    
     var body: some View {
         Button {
             
@@ -30,6 +41,15 @@ struct Task: View {
                         .padding(.leading, 30)
                         
                         Spacer()
+                        
+                        VStack {
+                            ForEach(0..<data.priority, id: \.self) { amount in
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(priorityColor)
+                            }
+                        }
+                        .padding(.trailing, 30)
                     }
                 )
         }

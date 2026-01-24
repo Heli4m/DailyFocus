@@ -16,6 +16,10 @@ struct TaskEditBar: View {
     @State private var minutes: Int = 0
     @State private var selectedPriority: Int = 1
     
+    var doneButtonColor: Color {
+        selectedtaskName.isEmpty ? Config.inactiveAccentColor : Config.accentColor
+    }
+    
     var selectedDuration: Int {
         let hoursToMinutes = hours * 60
         return hoursToMinutes + minutes
@@ -52,17 +56,19 @@ struct TaskEditBar: View {
                     Spacer()
                     
                     Button {
-                        let newTask = TaskData(
-                            name: selectedtaskName,
-                            time: selectedDuration,
-                            priority: selectedPriority
-                        )
-                        onCreate(newTask)
-                        dismiss()
+                        if selectedtaskName != "" {
+                            let newTask = TaskData(
+                                name: selectedtaskName,
+                                time: selectedDuration,
+                                priority: selectedPriority
+                            )
+                            onCreate(newTask)
+                            dismiss()
+                        }
                     } label: {
                         RoundedRectangle(cornerRadius: 15)
-                            .foregroundStyle(Color(Config.accentColor))
-                            .frame(width: geometry.size.width - 50, height: 40)
+                            .foregroundStyle(doneButtonColor)
+                            .frame(width: geometry.size.width - 30, height: 40)
                             .overlay {
                                 LexendMediumText(text: "Done", size: 18)
                                     .foregroundStyle(Color(Config.primaryText))
