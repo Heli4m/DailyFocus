@@ -25,7 +25,9 @@ struct ContentView: View {
                 ScrollView {
                     VStack {
                         ForEach(TaskList) { task in
-                            Task(width: geometry.size.width - 30, data: task)
+                            Task(width: geometry.size.width - 30, data: task) {
+                                activeState = .openingTask
+                            }
                         }
                     }
                 }
@@ -48,6 +50,13 @@ struct ContentView: View {
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))
                     
+                case .openingTask:
+                    TaskUseBar {
+                        EmptyView()
+                    }
+                    .presentationDetents([.fraction(0.25)])
+                        .presentationDragIndicator(.visible)
+                        .presentationBackground(Color(Config.bgColor))
                 }
             }
         }

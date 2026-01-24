@@ -7,22 +7,24 @@
 
 import SwiftUI
 
+// TaskEditBar is displayed in .sheet
 struct TaskEditBar: View {
-    @Environment(\.dismiss) var dismiss
-    var onCreate: (TaskData) -> Void
+    @Environment(\.dismiss) var dismiss // random code to allow button to dismiss the .sheet
+    var onCreate: (TaskData) -> Void // the struct's function, can be called upon when the struct is called
     
+    // user filled variables
     @State var selectedtaskName: String = ""
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
     @State private var selectedPriority: Int = 1
-    
-    var doneButtonColor: Color {
-        selectedtaskName.isEmpty ? Config.inactiveAccentColor : Config.accentColor
-    }
-    
-    var selectedDuration: Int {
+    var selectedDuration: Int { // uses some calculation to store duration in minutes
         let hoursToMinutes = hours * 60
         return hoursToMinutes + minutes
+    }
+    
+    // stores color states for the done button
+    var doneButtonColor: Color {
+        selectedtaskName.isEmpty ? Config.inactiveAccentColor : Config.accentColor
     }
     
     var body: some View {
@@ -55,15 +57,15 @@ struct TaskEditBar: View {
                     
                     Spacer()
                     
-                    Button {
+                    Button { // done button
                         if selectedtaskName != "" {
                             let newTask = TaskData(
                                 name: selectedtaskName,
                                 time: selectedDuration,
                                 priority: selectedPriority
-                            )
-                            onCreate(newTask)
-                            dismiss()
+                            ) // creates a new task based on the TaskData struct
+                            onCreate(newTask) // shoves the newTask into oncreate function so that it can be processed elsewhere
+                            dismiss() // closes the .sheet
                         }
                     } label: {
                         RoundedRectangle(cornerRadius: 15)

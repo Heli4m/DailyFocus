@@ -11,6 +11,8 @@ struct Task: View {
     let width: CGFloat
     let data: TaskData
     
+    var onOpen: () -> Void
+    
     var priorityColor: Color {
         switch data.priority {
         case 3:
@@ -24,7 +26,7 @@ struct Task: View {
     
     var body: some View {
         Button {
-            
+            onOpen()
         } label: {
             RoundedRectangle(cornerRadius: 20)
                 .frame(width: width, height: 100)
@@ -61,5 +63,7 @@ struct Task: View {
         name: "Mock Task",
         time: 10,
         priority: 2
-    ))
+    )) {
+        print("placehold")
+    }
 }
