@@ -24,6 +24,19 @@ struct Task: View {
         }
     }
     
+    var formattedTime: String {
+        let hours = data.time / 60
+        let minutes = data.time % 60
+        
+        if hours == 0 {
+            return "\(minutes)m"
+        } else if minutes == 0 {
+            return "\(hours)h"
+        } else {
+            return "\(hours)h \(minutes)m"
+        }
+    }
+    
     var body: some View {
         Button {
             onOpen()
@@ -37,7 +50,7 @@ struct Task: View {
                             LexendMediumText(text: data.name, size: 20)
                                 .foregroundStyle(Config.primaryText)
                             
-                            LexendMediumText(text: "\(data.time) minutes", size: 15)
+                            LexendMediumText(text: formattedTime, size: 15)
                                 .foregroundStyle(Config.secondaryText)
                         }
                         .padding(.leading, 30)
