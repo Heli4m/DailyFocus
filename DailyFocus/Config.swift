@@ -36,6 +36,7 @@ struct TaskData: Identifiable {
 enum AppState: String, Identifiable {
     case editingTask
     case openingTask
+    case runningTask
     
     var id: String { self.rawValue }
 }

@@ -116,6 +116,7 @@ struct WheelForm: View {
                 ForEach (range, id: \.self) { duration in
                     LexendRegularText(text: "\(duration)", size: 18)
                         .foregroundStyle(Color(Config.accentColor))
+                        .tag(duration)
                 }
             }
             .pickerStyle(.wheel)
