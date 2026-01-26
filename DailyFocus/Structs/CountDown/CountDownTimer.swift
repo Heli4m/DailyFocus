@@ -10,8 +10,15 @@ import Combine
 
 struct CountDownTimer: View {
     @State var secondsRemaining: Int
-    @State var isActive: Bool = true
-    @State private var showPauseOverlay: Bool = false
+    @State var timerState: TimerStates = .running
+    
+    var isRunning: Bool {
+        timerState == .running
+    }
+    
+    var showPausedOverlay: Bool {
+        timerState == .paused
+    }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -37,32 +44,37 @@ struct CountDownTimer: View {
                 .contentTransition(.numericText(value: Double(secondsRemaining)))
                 .animation(.snappy, value: secondsRemaining)
             
-            if showPauseOverlay {
-                PauseTimer(isActive: $isActive)
-                    .transition(.move(edge: .bottom))
-                    .onTapGesture {
-                        isActive = true
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                showPauseOverlay = false
-                            }
-                        }
-                    }
+            if timerState == .paused {
+                PauseTimer {
+                    resume()
+                }
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .bottom).combined(with: .opacity),
+                        removal: .opacity
+                    )
+                )
             }
         }
         .onReceive(timer) { _ in
-            if isActive && secondsRemaining > 0 {
+            guard timerState == .running else { return }
+            
+            if secondsRemaining > 0 {
                 secondsRemaining -= 1
-            } else if secondsRemaining == 0 {
-                isActive = false
+            } else {
+                timerState = .finished
             }
         }
         .onTapGesture(count: 2) {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                isActive = false
-                showPauseOverlay = true
+                timerState = .paused
             }
+        }
+    }
+    
+    func resume() {
+        withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+            timerState = .running
         }
     }
 }

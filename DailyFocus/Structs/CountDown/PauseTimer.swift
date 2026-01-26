@@ -8,38 +8,39 @@
 import SwiftUI
 
 struct PauseTimer: View {
-    @Binding var isActive: Bool
-    
-    // animation variables
-    @State private var popScale: CGFloat = 0.8
-    @State private var popOpacity: Double = 0.0
+    let onResume: () -> Void
+
+    @State private var showPlay = false
+    @State private var scale: CGFloat = 1.0
+
     var body: some View {
         ZStack {
             Rectangle()
                 .foregroundStyle(Color.black.opacity(0.5))
                 .ignoresSafeArea()
-            
-            if !isActive {
-                LexendPauseShape()
-                    .frame(width: 70, height: 70)
-                    .foregroundStyle(Config.bgColor)
+
+            ZStack {
+                if showPlay {
+                    LexendPlayShape()
+                        .transition(.scale.combined(with: .opacity))
+                } else {
+                    LexendPauseShape()
+                        .transition(.opacity)
+                }
             }
-            
-            if isActive {
-                LexendPlayShape()
-                    .frame(width: 70, height: 70)
-                    .foregroundStyle(Config.bgColor)
-                    .scaleEffect(popScale)
-                    .opacity(popOpacity)
-                    .onAppear {
-                        withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
-                            popScale = 1.0
-                            popOpacity = 1.0
-                        }
-                    }
+            .frame(width: 70, height: 70)
+            .foregroundStyle(Config.bgColor)
+            .scaleEffect(scale)
+        }
+        .onTapGesture {
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
+                showPlay = true
+                scale = 1.3
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                onResume()
             }
         }
-        .drawingGroup()
-        .ignoresSafeArea()
     }
 }
