@@ -41,13 +41,28 @@ struct ContentView: View {
                     .position(x: geometry.size.width - 75, y: geometry.size.height - 50)
                 }
             }
+            
+            
             .sheet(isPresented: Binding(
                 get: { activeState == .editingTask },
                 set: { if !$0 { activeState = nil } }
             )) {
-                TaskEditBar() { createdTask in
-                    TaskList.append(createdTask)
-                }
+                TaskEditBar(
+                    onCreate: { createdTask in
+                        if selectedTask == nil {
+                            TaskList.append(createdTask)
+                        }
+                    },
+                    
+                    onEdit: { updatedTask in
+                        if let index = TaskList.firstIndex(where: { $0.id == updatedTask.id }) {
+                            TaskList[index] = updatedTask
+                        }
+                        selectedTask = nil 
+                        activeState = nil
+                    },
+                    existingTask: selectedTask
+                )
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
                 .presentationBackground(Color(Config.bgColor))
@@ -58,9 +73,14 @@ struct ContentView: View {
                 set: { if !$0 { activeState = nil } }
             )) {
                 if let _ = selectedTask {
-                    TaskUseBar {
-                        activeState = .runningTask
-                    }
+                    TaskUseBar (
+                        onStart: {
+                            activeState = .runningTask
+                        },
+                        onEdit: {
+                            activeState = .editingTask
+                        }
+                    )
                     .presentationDetents([.fraction(0.25)])
                     .presentationDragIndicator(.visible)
                     .presentationBackground(Color(Config.bgColor))

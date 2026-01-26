@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct TaskUseBar: View {
-    var start: () -> Void
+    var onStart: () -> Void
+    var onEdit: () -> Void
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 VStack {
                     Spacer()
                     Button {
-                        start()
+                        onStart()
                     } label: {
                         RoundedRectangle(cornerRadius: 15)
                             .frame(width: geometry.size.width - 50, height: 50)
@@ -27,7 +29,7 @@ struct TaskUseBar: View {
                     }
                     
                     Button {
-                        
+                        onEdit()
                     } label: {
                         RoundedRectangle(cornerRadius: 15)
                             .frame(width: geometry.size.width - 50, height: 50)
@@ -46,7 +48,12 @@ struct TaskUseBar: View {
 }
 
 #Preview {
-    TaskUseBar() {
-        print("placehold")
-    }
+    TaskUseBar(
+        onStart: {
+            print("placeholder")
+        },
+        onEdit: {
+            print("placeholder #2")
+        }
+    )
 }

@@ -11,6 +11,8 @@ import SwiftUI
 struct TaskEditBar: View {
     @Environment(\.dismiss) var dismiss // random code to allow button to dismiss the .sheet
     var onCreate: (TaskData) -> Void // the struct's function, can be called upon when the struct is called
+    var onEdit: ((TaskData) -> Void)? = nil
+    var existingTask: TaskData? = nil
     
     // user filled variables
     @State var selectedtaskName: String = ""
@@ -20,6 +22,21 @@ struct TaskEditBar: View {
     var selectedDuration: Int { // uses some calculation to store duration in minutes
         let hoursToMinutes = hours * 60
         return hoursToMinutes + minutes
+    }
+    
+    init(
+        onCreate: @escaping (TaskData) -> Void,
+        onEdit: ((TaskData) -> Void)? = nil,
+        existingTask: TaskData? = nil
+    ) {
+        self.onEdit = onEdit
+        self.onCreate = onCreate
+        self.existingTask = existingTask
+        
+        _selectedtaskName = State(initialValue: existingTask?.name ?? "")
+        _hours = State(initialValue: (existingTask?.time ?? 0) / 60)
+        _minutes = State(initialValue: (existingTask?.time ?? 0) % 60)
+        _selectedPriority = State(initialValue: existingTask?.priority ?? 1)
     }
     
     // stores color states for the done button
@@ -59,12 +76,22 @@ struct TaskEditBar: View {
                     
                     Button { // done button
                         if selectedtaskName != "" {
-                            let newTask = TaskData(
-                                name: selectedtaskName,
-                                time: selectedDuration,
-                                priority: selectedPriority
-                            ) // creates a new task based on the TaskData struct
-                            onCreate(newTask) // shoves the newTask into oncreate function so that it can be processed elsewhere
+                            if let existingTask = existingTask {
+                                let updatedTask = TaskData(
+                                    id: existingTask.id, 
+                                    name: selectedtaskName,
+                                    time: selectedDuration,
+                                    priority: selectedPriority
+                                )
+                                onEdit?(updatedTask)
+                            } else {
+                                let newTask = TaskData(
+                                    name: selectedtaskName,
+                                    time: selectedDuration,
+                                    priority: selectedPriority
+                                ) // creates a new task based on the TaskData struct
+                                onCreate(newTask) // shoves the newTask into oncreate function so that it can be processed elsewhere
+                            }
                             dismiss() // closes the .sheet
                         }
                     } label: {

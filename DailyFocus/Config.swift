@@ -26,10 +26,17 @@ struct Config {
 
 // stores data for each tasks
 struct TaskData: Identifiable {
-    let id = UUID()
+    let id: UUID
     let name: String
     let time: Int
     let priority: Int
+    
+    init(id: UUID = UUID(), name: String, time: Int, priority: Int) {
+        self.id = id
+        self.name = name
+        self.time = time
+        self.priority = priority
+    }
 }
 
 // enum for all of the states of the app

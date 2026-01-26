@@ -9,21 +9,27 @@ import SwiftUI
 
 // Designed with the same "smoothness" as Lexend Medium
 struct LexendPlayShape: Shape {
+    var cornerRadius: CGFloat = 10 // Added a property for flexibility
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
-        // We use a rounded path approach to avoid sharp points
         let width = rect.width
         let height = rect.height
         
-        // Defining the triangle points with a slight inset for the "Lexend" curve
-        let p1 = CGPoint(x: width * 0.15, y: 0)
-        let p2 = CGPoint(x: width * 0.15, y: height)
-        let p3 = CGPoint(x: width, y: height * 0.5)
+        // Defining the triangle points
+        let p1 = CGPoint(x: width * 0.15, y: 0)          // Top Left
+        let p2 = CGPoint(x: width * 0.15, y: height)     // Bottom Left
+        let p3 = CGPoint(x: width, y: height * 0.5)      // Right Tip
         
-        path.move(to: p1)
-        path.addLine(to: p2)
-        path.addLine(to: p3)
+        // Start at the midpoint of the left side to ensure corners round correctly
+        path.move(to: CGPoint(x: p1.x, y: height * 0.5))
+        
+        // Rounding each corner using tangents
+        path.addArc(tangent1End: p1, tangent2End: p3, radius: cornerRadius)
+        path.addArc(tangent1End: p3, tangent2End: p2, radius: cornerRadius)
+        path.addArc(tangent1End: p2, tangent2End: p1, radius: cornerRadius)
+        
         path.closeSubpath()
         
         return path
