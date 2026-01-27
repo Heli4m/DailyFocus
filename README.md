@@ -1,5 +1,10 @@
 # DailyFocus 
 
+<img width="248" height="511" alt="Screenshot 2026-01-26 at 22 39 20" src="https://github.com/user-attachments/assets/8871cddf-2153-4619-a974-53348c385312" />
+<img width="303" height="604" alt="Screenshot 2026-01-27 at 08 14 46" src="https://github.com/user-attachments/assets/7cbd531a-7296-471a-8dca-55dcaca156bd" />
+
+Images of my app ^
+
 ⏱️ DailyFocus is a minimalist task management and productivity timer built with SwiftUI. It’s designed to help users prioritize their day and stay focused on one task at a time using an intuitive, gesture-based interface.
 
 I started this project during my sophomore year of high school to explore custom animations, state management, and different frameworks in Swift.
