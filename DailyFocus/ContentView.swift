@@ -23,16 +23,26 @@ struct ContentView: View {
                     .ignoresSafeArea()
                     .frame(minWidth: 0)
                 
-                ScrollView {
-                    VStack {
-                        ForEach(TaskList) { task in
-                            Task(width: geometry.size.width - 30, data: task) {
-                                selectedTask = task
-                                activeState = .openingTask
+                List {
+                    ForEach(TaskList.sorted(by: { $0.priority > $1.priority })) { task in
+                        Task(width: geometry.size.width - 30, data: task) {
+                            selectedTask = task
+                            activeState = .openingTask
+                        }
+                        .frame(height: 100)
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                deleteTask(task)
+                            } label: {
+                                Label("", systemImage: "trash")
                             }
                         }
                     }
+                    .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 }
+                .listStyle(.plain)
                 
                 VStack {
                     NewTaskButton() {
@@ -93,11 +103,17 @@ struct ContentView: View {
             )) {
                 if let task = selectedTask {
                     CountDownTimer(secondsRemaining: task.time * 60) // Convert to seconds
-                        .presentationDetents([.large])
+                        .presentationDetents([.large, .medium])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))
                 }
             }
+        }
+    }
+    
+    func deleteTask( _ task: TaskData) {
+        if let index = TaskList.firstIndex(where: { $0.id == task.id }) {
+            TaskList.remove(at: index)
         }
     }
 }

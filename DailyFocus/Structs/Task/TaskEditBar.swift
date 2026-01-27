@@ -9,10 +9,19 @@ import SwiftUI
 
 // TaskEditBar is displayed in .sheet
 struct TaskEditBar: View {
-    @Environment(\.dismiss) var dismiss // random code to allow button to dismiss the .sheet
-    var onCreate: (TaskData) -> Void // the struct's function, can be called upon when the struct is called
-    var onEdit: ((TaskData) -> Void)? = nil
+    
+    
+    
+    // VARIABLES & INIT
+    @Environment(\.dismiss) var dismiss // allows the code to dismiss .sheet
+    var onCreate: (TaskData) -> Void // function that can have code put in after, for task creation
+    var onEdit: ((TaskData) -> Void)? = nil // for task editing
     var existingTask: TaskData? = nil
+    
+    // stores color states for the done button
+    var doneButtonColor: Color {
+        selectedtaskName.isEmpty ? Config.inactiveAccentColor : Config.accentColor
+    }
     
     // user filled variables
     @State var selectedtaskName: String = ""
@@ -24,6 +33,7 @@ struct TaskEditBar: View {
         return hoursToMinutes + minutes
     }
     
+    // custom init to fill in after edit
     init(
         onCreate: @escaping (TaskData) -> Void,
         onEdit: ((TaskData) -> Void)? = nil,
@@ -39,11 +49,9 @@ struct TaskEditBar: View {
         _selectedPriority = State(initialValue: existingTask?.priority ?? 1)
     }
     
-    // stores color states for the done button
-    var doneButtonColor: Color {
-        selectedtaskName.isEmpty ? Config.inactiveAccentColor : Config.accentColor
-    }
     
+    
+    // MAIN VIEW
     var body: some View {
         GeometryReader { geometry in
             ZStack {

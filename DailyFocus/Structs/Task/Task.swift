@@ -42,7 +42,8 @@ struct Task: View {
             onOpen()
         } label: {
             RoundedRectangle(cornerRadius: 20)
-                .frame(width: width, height: 100)
+                .frame(width: width)
+                .frame(maxHeight: .infinity)
                 .foregroundStyle(Color(Config.itemColor))
                 .overlay (
                     HStack {

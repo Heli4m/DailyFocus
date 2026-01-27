@@ -1,10 +1,3 @@
-//
-//  PauseShapes.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 25/1/26.
-//
-
 import SwiftUI
 
 // Designed with the same "smoothness" as Lexend Medium
