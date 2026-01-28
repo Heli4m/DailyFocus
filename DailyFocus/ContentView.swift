@@ -96,7 +96,7 @@ struct ContentView: View {
                 set: { if !$0 { activeState = nil } }
             )) {
                 if let task = selectedTask {
-                    CountDownTimer(secondsRemaining: task.time * 60) // Convert to seconds
+                    CountDownTimer(secondsRemaining: task.time * 60, totalSeconds: task.time * 60) // Convert to seconds
                         .presentationDetents([.large, .medium])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))
@@ -108,6 +108,7 @@ struct ContentView: View {
         }
         .onAppear() {
             TaskList = loadData()
+            requestNotifyPermission()
         }
     }
     

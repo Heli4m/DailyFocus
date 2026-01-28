@@ -7,9 +7,11 @@
 
 import SwiftUI
 import Combine
+import UserNotifications
 
 struct CountDownTimer: View {
     @State var secondsRemaining: Int
+    let totalSeconds: Int
     @State var timerState: TimerStates = .running
     
     var isRunning: Bool {
@@ -44,6 +46,21 @@ struct CountDownTimer: View {
                 .contentTransition(.numericText(value: Double(secondsRemaining)))
                 .animation(.snappy, value: secondsRemaining)
             
+            ZStack {
+                Circle()
+                    .stroke(Config.primaryText.opacity(0.1), lineWidth: 20)
+                
+                Circle()
+                    .trim(from: 0, to: CGFloat(secondsRemaining) / CGFloat(totalSeconds))
+                    .stroke(
+                        Color(Config.accentColor),
+                        style: StrokeStyle(lineWidth: 10)
+                    )
+                    .rotationEffect(.degrees(-90)) // Start at the top
+                    .animation(.linear(duration: 1), value: secondsRemaining)
+            }
+            .frame(width: 350, height: 350)
+            
             if timerState == .paused {
                 PauseTimer {
                     resume()
@@ -56,6 +73,10 @@ struct CountDownTimer: View {
                 )
             }
         }
+        .onAppear() {
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            scheduleNotification(secondsRemaining: secondsRemaining)
+        }
         .onReceive(timer) { _ in
             guard timerState == .running else { return }
             
@@ -63,11 +84,13 @@ struct CountDownTimer: View {
                 secondsRemaining -= 1
             } else {
                 timerState = .finished
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             }
         }
         .onTapGesture(count: 2) {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                 timerState = .paused
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             }
         }
     }
@@ -75,10 +98,11 @@ struct CountDownTimer: View {
     func resume() {
         withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
             timerState = .running
+            scheduleNotification(secondsRemaining: secondsRemaining)
         }
     }
 }
 
 #Preview {
-    CountDownTimer(secondsRemaining: 3600)
+    CountDownTimer(secondsRemaining: 3600, totalSeconds: 3600)
 }
