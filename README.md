@@ -1,7 +1,7 @@
 # DailyFocus 
 
-<img width="248" height="511" alt="Screenshot 2026-01-26 at 22 39 20" src="https://github.com/user-attachments/assets/8871cddf-2153-4619-a974-53348c385312" />
-<img width="303" height="604" alt="Screenshot 2026-01-27 at 08 14 46" src="https://github.com/user-attachments/assets/7cbd531a-7296-471a-8dca-55dcaca156bd" />
+<img width="201" height="437" alt="Simulator Screenshot - iPhone 17 - 2026-01-28 at 07 44 54" src="https://github.com/user-attachments/assets/3cca9324-ac9a-444c-962b-ede35e2adcb6" />
+<img width="201" height="437" alt="Simulator Screenshot - iPhone 17 - 2026-01-28 at 07 44 07" src="https://github.com/user-attachments/assets/82218060-5f77-4a96-81d6-dabbb63e8436" />
 
 Images of my app ^
 
@@ -47,7 +47,7 @@ As I continue developing this project, I plan to implement:
 
 - [ ] Data Persistence: Moving from @State to SwiftData or UserDefaults so tasks save after closing the app.
 
-- [ ] Swipe-to-Delete: Improving the UX of the task list.
+- [x] Swipe-to-Delete: Improving the UX of the task list.
 
 - [ ] Haptic Feedback: Adding UIImpactFeedbackGenerator for a more physical feel when buttons are pressed.
 
