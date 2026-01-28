@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var activeState: AppState? = nil
     @State private var selectedTask: TaskData? = nil
     @State private var TaskList: [TaskData] = []
+    @State private var hasAppeared: Bool = false
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -31,11 +32,24 @@ struct ContentView: View {
                             .padding(.top)
                     }
                 } else {
+                    let sortedTasks = TaskList.sorted(by: { $0.priority > $1.priority })
                     List {
-                        ForEach(TaskList.sorted(by: { $0.priority > $1.priority })) { task in
+                        ForEach(Array(sortedTasks.enumerated()), id: \.element.id) { index, task in
                             Task(width: geometry.size.width - 30, data: task) {
                                 selectedTask = task
                                 activeState = .openingTask
+                            }
+                            .opacity(hasAppeared ? 1 : 0)
+                            .offset(y: hasAppeared ? 0 : 20)
+                            .animation(
+                                    .spring(response: 0.5, dampingFraction: 0.7)
+                                    .delay(Double(index) * 0.5),
+                                    value: hasAppeared
+                            )
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    hasAppeared = true
+                                }
                             }
                             .frame(height: 100)
                             .swipeActions(edge: .trailing) {
