@@ -17,27 +17,42 @@ struct ContentView: View {
                 Color(Config.bgColor)
                     .ignoresSafeArea()
                 
-                List {
-                    ForEach(TaskList.sorted(by: { $0.priority > $1.priority })) { task in
-                        Task(width: geometry.size.width - 30, data: task) {
-                            selectedTask = task
-                            activeState = .openingTask
-                        }
-                        .frame(height: 100)
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                deleteTask(task)
-                                Haptics.trigger(.rigid)
-                            } label: {
-                                Label("", systemImage: "trash")
+                if TaskList.isEmpty {
+                    VStack {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 80))
+                            .foregroundStyle(Config.accentColor)
+                            .padding(.bottom)
+                        
+                        LexendMediumText(text: "Tap the '+' to add your first focus app!", size: 24)
+                            .foregroundStyle(Config.primaryText)
+                            .monospacedDigit()
+                            .multilineTextAlignment(.center)
+                            .padding(.top)
+                    }
+                } else {
+                    List {
+                        ForEach(TaskList.sorted(by: { $0.priority > $1.priority })) { task in
+                            Task(width: geometry.size.width - 30, data: task) {
+                                selectedTask = task
+                                activeState = .openingTask
+                            }
+                            .frame(height: 100)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    deleteTask(task)
+                                    Haptics.trigger(.rigid)
+                                } label: {
+                                    Label("", systemImage: "trash")
+                                }
                             }
                         }
+                        .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                     }
-                    .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
                 
                 VStack {
                     NewTaskButton() {
