@@ -11,48 +11,58 @@ I started this project during my sophomore year of high school to explore custom
 
 DailyFocus is not yet a complete project, so stay tuned for future updates and releases!
 
-✨ Features: 
+✨ Features:
 
-- Priority-Based Sorting: Tasks are automatically organized by importance (High, Medium, Low).
+- Priority-Based Sorting: Automatically organizes tasks by High, Medium, and Low importance so the most critical work stays at the top.
 
-- Custom Timer Engine: A precise countdown timer built using Timer.publish and Combine.
+- Persistent Storage: Uses UserDefaults and JSON encoding to make sure tasks actually save to the device and don't disappear when the app is closed.
 
-- Gesture-Based Interaction: * Double-Tap to pause your focus session.
+- Advanced Timer Engine: A countdown system built with Combine that stays accurate even when switching between apps or locking the screen.
 
-- Interactive Overlays to resume work.
+- Local Notifications: Integration with the iOS notification system to send a "Time's up!" alert the second the timer hits zero, even if the app isn't open.
 
-- Custom UI Components: Unique shapes and buttons designed to match the "Lexend" font aesthetic.
+- Tactile Haptic Feedback: Physical vibrations using AudioToolbox that give a full alarm buzz when finishing a session.
 
-- Dynamic UI: Smooth spring animations and numeric transitions for a premium feel.
+- Gesture-Based UI: Clean, button-less timer interface that uses a Double-Tap gesture to pause and resume work.
 
-- Used UserDefaults with JSON data encoding
+- Dynamic Animations: Custom .spring() motion and numeric transitions to make the UI feel bouncy and reactive rather than static.
 
 <br>
 
-🛠️ Technical Implementation:
+🛠️ Technical Implementation
 
-This app serves as a deep dive into modern iOS development:
+- SwiftUI: 100% programmatic layouts using GeometryReader and ZStacks for precise component positioning.
 
-- SwiftUI: 100% programmatic UI using GeometryReader and ZStack for complex layouts.
+- Framework Integration: Real-world use of UserNotifications for background alerts and AudioServices for system haptics.
 
-- State Management: Utilizes @State, @Binding, and @Environment for reactive data flow.
+- Data Persistence: Implementation of Codable protocols to convert task data into JSON for local storage.
 
-- Custom Shapes: Implementation of the Shape protocol for unique Play/Pause buttons.
+- Custom Drawing: Usage of the Shape protocol to create custom play/pause icons that match the rounded "Lexend" aesthetic.
 
-- Animations: Use of .contentTransition(.numericText) and custom .spring() animations for tactile feedback.
+- State Management: Heavy use of @State, @Binding, and @Environment to pass data smoothly between the task list and the timer.
 
 <br>
 
 🚀 Roadmap (What I'm Learning Next)
 As I continue developing this project, I plan to implement:
 
-- [x] Data Persistence: Moving from @State to SwiftData or UserDefaults so tasks save after closing the app.
+- [x] Data Persistence: Implemented local storage using UserDefaults and JSON encoding.
 
 - [x] Swipe-to-Delete: Improving the UX of the task list.
 
-- [ ] Haptic Feedback: Adding UIImpactFeedbackGenerator for a more physical feel when buttons are pressed.
+- [x] Haptic Feedback: Integrated the AudioToolbox framework to provide a high-intensity system buzz when the timer finishes.
 
-- [ ] Other features: Checklist tasks, Pomodoro Technique,...etc
+- [x] Background Notifications: Integrated the UserNotifications framework to schedule local alerts, ensuring the "Time's Up" alarm triggers even if the app is closed or the screen is locked.
+
+- [ ] Checklist Tasks: Adding a simple "To-Do" mode for tasks that don't require a deep-focus timer.
+
+- [ ] Countable Tasks: Implementing a counter system for repetitive tasks or habits that need to be tracked by quantity.
+
+- [ ] Statistics Dashboard: Building a GitHub-style contribution grid to visualize focus minutes and completed tasks over time.
+
+- [ ] Home Screen Widgets: Creating interactive widgets to check timer progress at a glance without opening the app.
+
+- [ ] UI Humanization: Polishing the interface with custom icons, warmer color palettes, and balanced layouts to make the app feel more approachable and less "robotic."
 
 <br>
 
@@ -70,4 +80,4 @@ Build and run on an iPhone Simulator or physical device.
 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-Author: **Liam N.** *High School Student and Developer* [Github](https://github.com/your-username) | [Project Link](https://github.com/your-username/DailyFocus)
+Author: **Liam N.** *High School Student and Developer* [Github](https://github.com/Heli4m) | [Project Link](https://github.com/Heli4m/DailyFocus)
