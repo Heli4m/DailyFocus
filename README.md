@@ -9,7 +9,6 @@ Images of my app ^
 
 I started this project during my sophomore year of high school to explore custom animations, state management, and different frameworks in Swift.
 
-
 DailyFocus is not yet a complete project, so stay tuned for future updates and releases!
 
 ✨ Features: 
@@ -25,6 +24,8 @@ DailyFocus is not yet a complete project, so stay tuned for future updates and r
 - Custom UI Components: Unique shapes and buttons designed to match the "Lexend" font aesthetic.
 
 - Dynamic UI: Smooth spring animations and numeric transitions for a premium feel.
+
+- Used UserDefaults with JSON data encoding
 
 <br>
 
@@ -45,7 +46,7 @@ This app serves as a deep dive into modern iOS development:
 🚀 Roadmap (What I'm Learning Next)
 As I continue developing this project, I plan to implement:
 
-- [ ] Data Persistence: Moving from @State to SwiftData or UserDefaults so tasks save after closing the app.
+- [x] Data Persistence: Moving from @State to SwiftData or UserDefaults so tasks save after closing the app.
 
 - [x] Swipe-to-Delete: Improving the UX of the task list.
 
