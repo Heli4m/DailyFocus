@@ -40,6 +40,7 @@ struct ContentView: View {
                 
                 VStack {
                     NewTaskButton() {
+                        selectedTask = nil
                         activeState = .editingTask
                     }
                     .position(x: geometry.size.width - 75, y: geometry.size.height - 50)
@@ -49,7 +50,10 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .editingTask },
-                set: { if !$0 { activeState = nil } }
+                set: { if !$0 {
+                    activeState = nil
+                    selectedTask = nil
+                } }
             )) {
                 TaskEditBar(
                     onCreate: { createdTask in

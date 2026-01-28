@@ -20,7 +20,7 @@ struct TaskEditBar: View {
     
     // stores color states for the done button
     var doneButtonColor: Color {
-        selectedtaskName.isEmpty ? Config.inactiveAccentColor : Config.accentColor
+        (selectedtaskName.isEmpty || selectedDuration == 0) ? Config.inactiveAccentColor : Config.accentColor
     }
     
     // user filled variables
@@ -83,7 +83,7 @@ struct TaskEditBar: View {
                     Spacer()
                     
                     Button { // done button
-                        if selectedtaskName != "" {
+                        if !selectedtaskName.isEmpty && selectedDuration > 0 {
                             if let existingTask = existingTask {
                                 let updatedTask = TaskData(
                                     id: existingTask.id, 

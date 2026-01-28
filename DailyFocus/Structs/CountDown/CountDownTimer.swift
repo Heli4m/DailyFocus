@@ -13,6 +13,7 @@ struct CountDownTimer: View {
     @State var secondsRemaining: Int
     let totalSeconds: Int
     @State var timerState: TimerStates = .running
+    @State var isProcessingATap: Bool = false
     
     var isRunning: Bool {
         timerState == .running
@@ -39,6 +40,23 @@ struct CountDownTimer: View {
         ZStack {
             Color(Config.bgColor)
                 .ignoresSafeArea()
+                .onTapGesture(count: 2) {
+                    guard !isProcessingATap else { return }
+                    isProcessingATap = true
+                    
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        if timerState == .running {
+                            timerState = .paused
+                            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                        } else if timerState == .paused {
+                            resume()
+                        }
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        isProcessingATap = false
+                    }
+                }
             
             LexendMediumText(text: timeString, size: 80)
                 .foregroundStyle(Config.primaryText)
@@ -87,19 +105,11 @@ struct CountDownTimer: View {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             }
         }
-        .onTapGesture(count: 2) {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                timerState = .paused
-                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            }
-        }
     }
     
     func resume() {
-        withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
-            timerState = .running
-            scheduleNotification(secondsRemaining: secondsRemaining)
-        }
+        timerState = .running
+        scheduleNotification(secondsRemaining: secondsRemaining)
     }
 }
 
