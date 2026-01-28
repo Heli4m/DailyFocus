@@ -105,7 +105,7 @@ struct TaskEditBar: View {
                     } label: {
                         RoundedRectangle(cornerRadius: 15)
                             .foregroundStyle(doneButtonColor)
-                            .frame(width: geometry.size.width - 30, height: 40)
+                            .frame(width: max(0, geometry.size.width - 30), height: 40)
                             .overlay {
                                 LexendMediumText(text: "Done", size: 18)
                                     .foregroundStyle(Color(Config.primaryText))

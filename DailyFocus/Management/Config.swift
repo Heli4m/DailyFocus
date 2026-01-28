@@ -25,7 +25,7 @@ struct Config {
 }
 
 // stores data for each tasks
-struct TaskData: Identifiable {
+struct TaskData: Identifiable, Codable, Equatable {
     let id: UUID
     let name: String
     let time: Int

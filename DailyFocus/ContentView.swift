@@ -17,12 +17,6 @@ struct ContentView: View {
                 Color(Config.bgColor)
                     .ignoresSafeArea()
                 
-                Image("layeredWavesbg")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .frame(minWidth: 0)
-                
                 List {
                     ForEach(TaskList.sorted(by: { $0.priority > $1.priority })) { task in
                         Task(width: geometry.size.width - 30, data: task) {
@@ -108,6 +102,12 @@ struct ContentView: View {
                         .presentationBackground(Color(Config.bgColor))
                 }
             }
+        }
+        .onChange(of: TaskList) { oldtasks, newtasks in
+            saveData(data: newtasks)
+        }
+        .onAppear() {
+            TaskList = loadData()
         }
     }
     
