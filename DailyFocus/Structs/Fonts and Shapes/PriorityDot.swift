@@ -29,6 +29,7 @@ struct PriorityDotMainView: View {
                     Button {
                         selectedButton = index
                         sliderXPos = leftPadding + CGFloat(index - 1) * (width + gap)
+                        Haptics.trigger(.light)
                     } label: {
                         PriorityDotButton(index: index, selectedButton: $selectedButton)
                     }

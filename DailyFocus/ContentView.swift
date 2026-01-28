@@ -27,6 +27,7 @@ struct ContentView: View {
                         .swipeActions(edge: .trailing) {
                             Button(role: .destructive) {
                                 deleteTask(task)
+                                Haptics.trigger(.rigid)
                             } label: {
                                 Label("", systemImage: "trash")
                             }

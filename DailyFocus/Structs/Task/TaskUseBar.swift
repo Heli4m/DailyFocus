@@ -18,6 +18,7 @@ struct TaskUseBar: View {
                     Spacer()
                     Button {
                         onStart()
+                        Haptics.trigger(.medium)
                     } label: {
                         RoundedRectangle(cornerRadius: 15)
                             .frame(width: geometry.size.width - 50, height: 50)

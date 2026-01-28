@@ -92,6 +92,7 @@ struct TaskEditBar: View {
                                     priority: selectedPriority
                                 )
                                 onEdit?(updatedTask)
+                                Haptics.success()
                             } else {
                                 let newTask = TaskData(
                                     name: selectedtaskName,
@@ -99,6 +100,7 @@ struct TaskEditBar: View {
                                     priority: selectedPriority
                                 ) // creates a new task based on the TaskData struct
                                 onCreate(newTask) // shoves the newTask into oncreate function so that it can be processed elsewhere
+                                Haptics.success()
                             }
                             dismiss() // closes the .sheet
                         }

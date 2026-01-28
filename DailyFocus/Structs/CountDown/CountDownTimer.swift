@@ -44,6 +44,8 @@ struct CountDownTimer: View {
                     guard !isProcessingATap else { return }
                     isProcessingATap = true
                     
+                    Haptics.trigger(.heavy)
+                    
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                         if timerState == .running {
                             timerState = .paused
@@ -82,6 +84,7 @@ struct CountDownTimer: View {
             if timerState == .paused {
                 PauseTimer {
                     resume()
+                    Haptics.trigger(.light)
                 }
                 .transition(
                     .asymmetric(
