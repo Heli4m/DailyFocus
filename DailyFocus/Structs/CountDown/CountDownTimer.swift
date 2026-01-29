@@ -14,6 +14,7 @@ struct CountDownTimer: View {
     let totalSeconds: Int
     @State var timerState: TimerStates = .running
     @State var isProcessingATap: Bool = false
+    @State private var showConfetti: Bool = false
     
     var isRunning: Bool {
         timerState == .running
@@ -37,75 +38,87 @@ struct CountDownTimer: View {
         }
     }
     var body: some View {
-        ZStack {
-            Color(Config.bgColor)
-                .ignoresSafeArea()
-                .onTapGesture(count: 2) {
-                    guard !isProcessingATap else { return }
-                    isProcessingATap = true
-                    
-                    Haptics.trigger(.heavy)
-                    
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                        if timerState == .running {
-                            timerState = .paused
-                            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                        } else if timerState == .paused {
-                            resume()
+        GeometryReader { geometry in
+            ZStack {
+                Color(Config.bgColor)
+                    .ignoresSafeArea()
+                    .onTapGesture(count: 2) {
+                        guard !isProcessingATap else { return }
+                        isProcessingATap = true
+                        
+                        Haptics.trigger(.heavy)
+                        
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                            if timerState == .running {
+                                timerState = .paused
+                                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                            } else if timerState == .paused {
+                                resume()
+                            }
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            isProcessingATap = false
                         }
                     }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        isProcessingATap = false
-                    }
-                }
-            
-            LexendMediumText(text: timeString, size: 80)
-                .foregroundStyle(Config.primaryText)
-                .monospacedDigit()
-                .contentTransition(.numericText(value: Double(secondsRemaining)))
-                .animation(.snappy, value: secondsRemaining)
-            
-            ZStack {
-                Circle()
-                    .stroke(Config.primaryText.opacity(0.1), lineWidth: 20)
                 
-                Circle()
-                    .trim(from: 0, to: CGFloat(secondsRemaining) / CGFloat(totalSeconds))
-                    .stroke(
-                        Color(Config.accentColor),
-                        style: StrokeStyle(lineWidth: 10)
-                    )
-                    .rotationEffect(.degrees(-90)) // Start at the top
-                    .animation(.linear(duration: 1), value: secondsRemaining)
-            }
-            .frame(width: 350, height: 350)
-            
-            if timerState == .paused {
-                PauseTimer {
-                    resume()
-                    Haptics.trigger(.light)
+                LexendMediumText(text: timeString, size: 80)
+                    .foregroundStyle(Config.primaryText)
+                    .monospacedDigit()
+                    .contentTransition(.numericText(value: Double(secondsRemaining)))
+                    .animation(.snappy, value: secondsRemaining)
+                
+                ZStack {
+                    Circle()
+                        .stroke(Config.primaryText.opacity(0.1), lineWidth: 20)
+                    
+                    Circle()
+                        .trim(from: 0, to: CGFloat(secondsRemaining) / CGFloat(totalSeconds))
+                        .stroke(
+                            Color(Config.accentColor),
+                            style: StrokeStyle(lineWidth: 10)
+                        )
+                        .rotationEffect(.degrees(-90)) // Start at the top
+                        .animation(.linear(duration: 1), value: secondsRemaining)
                 }
-                .transition(
-                    .asymmetric(
-                        insertion: .move(edge: .bottom).combined(with: .opacity),
-                        removal: .opacity
+                .frame(width: 350, height: 350)
+                
+                if timerState == .paused {
+                    PauseTimer {
+                        resume()
+                        Haptics.trigger(.light)
+                    }
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .bottom).combined(with: .opacity),
+                            removal: .opacity
+                        )
                     )
-                )
+                }
+                
+                if showConfetti {
+                    Confetti(containerSize: geometry.size)
+                        .ignoresSafeArea()
+                        .zIndex(10)
+                }
             }
-        }
-        .onAppear() {
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            scheduleNotification(secondsRemaining: secondsRemaining)
-        }
-        .onReceive(timer) { _ in
-            guard timerState == .running else { return }
-            
-            if secondsRemaining > 0 {
-                secondsRemaining -= 1
-            } else {
-                timerState = .finished
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .onAppear() {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                scheduleNotification(secondsRemaining: secondsRemaining)
+            }
+            .onReceive(timer) { _ in
+                guard timerState == .running else { return }
+                
+                if secondsRemaining > 0 {
+                    secondsRemaining -= 1
+                } else {
+                    timerState = .finished
+                    withAnimation() {
+                        showConfetti = true
+                    }
+                    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                }
             }
         }
     }
@@ -117,5 +130,5 @@ struct CountDownTimer: View {
 }
 
 #Preview {
-    CountDownTimer(secondsRemaining: 3600, totalSeconds: 3600)
+    CountDownTimer(secondsRemaining: 1, totalSeconds: 1)
 }
