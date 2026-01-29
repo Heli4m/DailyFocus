@@ -34,6 +34,6 @@ struct NewTaskButton: View {
                     .rotationEffect(.degrees(rotation))
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(SquishButtonStyle())
     }
 }
