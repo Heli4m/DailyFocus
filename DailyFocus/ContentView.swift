@@ -12,6 +12,8 @@ struct ContentView: View {
     @State private var selectedTask: TaskData? = nil
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
+    
+    @State private var sparklePulse: Bool = false
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -24,8 +26,18 @@ struct ContentView: View {
                             .font(.system(size: 80))
                             .foregroundStyle(Config.accentColor)
                             .padding(.bottom)
+                            .scaleEffect(sparklePulse ? 1.1 : 1)
+                            .opacity(sparklePulse ? 1 : 0.7)
+                            .animation (
+                                .easeInOut(duration: 1.5).repeatForever(autoreverses: true),
+                                value: sparklePulse
+                            )
+                            .onAppear {
+                                sparklePulse = true
+                            }
+                            
                         
-                        LexendMediumText(text: "Tap the '+' to add your first focus app!", size: 24)
+                        LexendMediumText(text: "Tap the '+' to add your first focus app!", size: 28)
                             .foregroundStyle(Config.primaryText)
                             .monospacedDigit()
                             .multilineTextAlignment(.center)
