@@ -11,6 +11,9 @@ struct ContentView: View {
     @State private var activeState: AppState? = nil
     @State private var selectedTask: TaskData? = nil
     @State private var TaskList: [TaskData] = []
+    @State private var hasAppeared: Bool = false
+    
+    @State private var sparklePulse: Bool = false
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -23,19 +26,42 @@ struct ContentView: View {
                             .font(.system(size: 80))
                             .foregroundStyle(Config.accentColor)
                             .padding(.bottom)
+                            .scaleEffect(sparklePulse ? 1.1 : 1)
+                            .opacity(sparklePulse ? 1 : 0.7)
+                            .animation (
+                                .easeInOut(duration: 1.5).repeatForever(autoreverses: true),
+                                value: sparklePulse
+                            )
+                            .onAppear {
+                                sparklePulse = true
+                            }
+                            
                         
-                        LexendMediumText(text: "Tap the '+' to add your first focus app!", size: 24)
+                        LexendMediumText(text: "Tap the '+' to add your first focus app!", size: 28)
                             .foregroundStyle(Config.primaryText)
                             .monospacedDigit()
                             .multilineTextAlignment(.center)
                             .padding(.top)
                     }
                 } else {
+                    let sortedTasks = TaskList.sorted(by: { $0.priority > $1.priority })
                     List {
-                        ForEach(TaskList.sorted(by: { $0.priority > $1.priority })) { task in
+                        ForEach(Array(sortedTasks.enumerated()), id: \.element.id) { index, task in
                             Task(width: geometry.size.width - 30, data: task) {
                                 selectedTask = task
                                 activeState = .openingTask
+                            }
+                            .opacity(hasAppeared ? 1 : 0)
+                            .offset(y: hasAppeared ? 0 : 20)
+                            .animation(
+                                    .spring(response: 0.5, dampingFraction: 0.7)
+                                    .delay(Double(index) * 0.5),
+                                    value: hasAppeared
+                            )
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    hasAppeared = true
+                                }
                             }
                             .frame(height: 100)
                             .swipeActions(edge: .trailing) {

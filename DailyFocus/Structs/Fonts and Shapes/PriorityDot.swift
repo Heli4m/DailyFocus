@@ -33,6 +33,8 @@ struct PriorityDotMainView: View {
                     } label: {
                         PriorityDotButton(index: index, selectedButton: $selectedButton)
                     }
+                    .scaleEffect(selectedButton == index ? 1.0 : 0.9)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.5), value: selectedButton)
                 }
             }
             .padding(.leading, leftPadding)
