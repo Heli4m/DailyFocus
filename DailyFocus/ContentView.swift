@@ -20,75 +20,15 @@ struct ContentView: View {
                 Color(Config.bgColor)
                     .ignoresSafeArea()
                 
-                if TaskList.isEmpty {
-                    VStack { // no tasks view
-                        Image(systemName: "sparkles")
-                            .font(.system(size: 80))
-                            .foregroundStyle(Config.accentColor)
-                            .padding(.bottom)
-                            .scaleEffect(sparklePulse ? 1.1 : 1)
-                            .opacity(sparklePulse ? 1 : 0.7)
-                            .animation (
-                                .easeInOut(duration: 1.5).repeatForever(autoreverses: true),
-                                value: sparklePulse
-                            )
-                            .onAppear {
-                                sparklePulse = true
-                            }
-                            
-                        
-                        LexendMediumText(text: "Tap the '+' to add your first focus task!", size: 28)
-                            .foregroundStyle(Config.primaryText)
-                            .monospacedDigit()
-                            .multilineTextAlignment(.center)
-                            .padding(.top)
-                    }
-                } else {
-                    let sortedTasks = TaskList.sorted(by: { $0.priority > $1.priority })
-                    List { // list of tasks
-                        ForEach(Array(sortedTasks.enumerated()), id: \.element.id) { index, task in
-                            Task(width: geometry.size.width - 30, data: task) {
-                                selectedTask = task
-                                activeState = .openingTask
-                            }
-                            .opacity(hasAppeared ? 1 : 0)
-                            .offset(y: hasAppeared ? 0 : 20)
-                            .animation(
-                                    .spring(response: 0.5, dampingFraction: 0.7)
-                                    .delay(Double(index) * 0.5),
-                                    value: hasAppeared
-                            )
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    hasAppeared = true
-                                }
-                            }
-                            .frame(height: 100)
-                            .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
-                                    deleteTask(task)
-                                    Haptics.trigger(.rigid)
-                                } label: {
-                                    Label("", systemImage: "trash")
-                                }
-                            }
-                        }
-                        .listRowInsets(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                    }
-                    .listStyle(.plain)
-                }
-                
-                VStack {
-                    NewTaskButton() { // the '+' button
-                        selectedTask = nil
-                        activeState = .editingTask
-                    }
-                    .position(x: geometry.size.width - 75, y: geometry.size.height - 50)
-                }
+                HomeView(
+                    geometry: geometry,
+                    hasAppeared: $hasAppeared,
+                    selectedTask: $selectedTask,
+                    activeState: $activeState,
+                    deleteTask: deleteTask,
+                    TaskList: TaskList
+                )
             }
-            
             
             .sheet(isPresented: Binding(
                 get: { activeState == .editingTask },

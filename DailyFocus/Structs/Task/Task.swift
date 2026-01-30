@@ -40,6 +40,8 @@ struct Task: View {
     var body: some View {
         Button {
             onOpen()
+            Haptics.trigger(.light)
+            print("\(data.name)")
         } label: {
             RoundedRectangle(cornerRadius: 20)
                 .frame(width: width)
