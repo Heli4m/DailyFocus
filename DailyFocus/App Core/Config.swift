@@ -23,27 +23,3 @@ struct Config {
     static let primaryText = Color(red: 232/255, green: 234/255, blue: 237/255)
     static let secondaryText = Color(red: 154/255, green: 160/255, blue: 166/255)
 }
-
-// stores data for each tasks
-struct TaskData: Identifiable, Codable, Equatable {
-    let id: UUID
-    let name: String
-    let time: Int
-    let priority: Int
-    
-    init(id: UUID = UUID(), name: String, time: Int, priority: Int) {
-        self.id = id
-        self.name = name
-        self.time = time
-        self.priority = priority
-    }
-}
-
-// enum for all of the states of the app
-enum AppState: String, Identifiable {
-    case editingTask
-    case openingTask
-    case runningTask
-    
-    var id: String { self.rawValue }
-}
