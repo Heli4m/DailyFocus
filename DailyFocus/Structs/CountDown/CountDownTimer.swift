@@ -49,39 +49,15 @@ struct CountDownTimer: View {
                     .contentTransition(.numericText(value: Double(timeModel.secondsRemaining)))
                     .animation(.snappy, value: timeModel.secondsRemaining)
                 
-                ZStack {
-                    Circle()
-                        .stroke(Config.primaryText.opacity(0.1), lineWidth: 20)
-                    
-                    Circle()
-                        .trim(from: 0, to: CGFloat(timeModel.secondsRemaining) / CGFloat(timeModel.totalSeconds))
-                        .stroke(
-                            Color(Config.accentColor),
-                            style: StrokeStyle(lineWidth: 10)
-                        )
-                        .rotationEffect(.degrees(-90))
-                        .animation(.linear(duration: 1), value: timeModel.secondsRemaining)
-                }
-                .frame(width: 350, height: 350)
+                TimerCircleView (
+                    secondsRemaining: timeModel.secondsRemaining,
+                    totalSeconds: timeModel.totalSeconds
+                )
                 
-                if timeModel.timerState == .paused {
-                    PauseTimer {
-                        timeModel.resume()
-                        Haptics.trigger(.light)
-                    }
-                    .transition(
-                        .asymmetric(
-                            insertion: .move(edge: .bottom).combined(with: .opacity),
-                            removal: .opacity
-                        )
-                    )
-                }
-                
-                if timeModel.showConfetti {
-                    Confetti(containerSize: geometry.size)
-                        .ignoresSafeArea()
-                        .zIndex(10)
-                }
+                TimerStatusOverlay(
+                    timeModel: timeModel,
+                    containerSize: geometry.size
+                )
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .onAppear() {
