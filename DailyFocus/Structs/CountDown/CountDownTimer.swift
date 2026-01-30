@@ -10,82 +10,63 @@ import Combine
 import UserNotifications
 
 struct CountDownTimer: View {
-    @State var secondsRemaining: Int
-    let totalSeconds: Int
-    @State var timerState: TimerStates = .running
-    @State var isProcessingATap: Bool = false
-    @State private var showConfetti: Bool = false
+    @State private var timeModel: TimerViewModel
     
-    var isRunning: Bool {
-        timerState == .running
-    }
-    
-    var showPausedOverlay: Bool {
-        timerState == .paused
+    init(seconds: Int) {
+        _timeModel = State(wrappedValue: TimerViewModel(initialSeconds: seconds))
     }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    var timeString: String {
-        let hours = secondsRemaining / 3600
-        let minutes = (secondsRemaining % 3600) / 60
-        let seconds = secondsRemaining % 60
-        
-        if hours > 0 {
-            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            return String(format: "%02d:%02d", minutes, seconds)
-        }
-    }
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 Color(Config.bgColor)
                     .ignoresSafeArea()
                     .onTapGesture(count: 2) {
-                        guard !isProcessingATap else { return }
-                        isProcessingATap = true
+                        guard !timeModel.isProcessingATap else { return }
+                        timeModel.isProcessingATap = true
                         
                         Haptics.trigger(.heavy)
                         
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                            if timerState == .running {
-                                timerState = .paused
-                                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                            } else if timerState == .paused {
-                                resume()
+                            if timeModel.timerState == .running {
+                                timeModel.timerState = .paused
+                                timeModel.notifications.cancelNotifications()
+                            } else if timeModel.timerState == .paused {
+                                timeModel.resume()
                             }
                         }
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            isProcessingATap = false
+                            timeModel.isProcessingATap = false
                         }
                     }
                 
-                LexendMediumText(text: timeString, size: 80)
+                LexendMediumText(text: timeModel.timeString, size: 80)
                     .foregroundStyle(Config.primaryText)
                     .monospacedDigit()
-                    .contentTransition(.numericText(value: Double(secondsRemaining)))
-                    .animation(.snappy, value: secondsRemaining)
+                    .contentTransition(.numericText(value: Double(timeModel.secondsRemaining)))
+                    .animation(.snappy, value: timeModel.secondsRemaining)
                 
                 ZStack {
                     Circle()
                         .stroke(Config.primaryText.opacity(0.1), lineWidth: 20)
                     
                     Circle()
-                        .trim(from: 0, to: CGFloat(secondsRemaining) / CGFloat(totalSeconds))
+                        .trim(from: 0, to: CGFloat(timeModel.secondsRemaining) / CGFloat(timeModel.totalSeconds))
                         .stroke(
                             Color(Config.accentColor),
                             style: StrokeStyle(lineWidth: 10)
                         )
-                        .rotationEffect(.degrees(-90)) // Start at the top
-                        .animation(.linear(duration: 1), value: secondsRemaining)
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear(duration: 1), value: timeModel.secondsRemaining)
                 }
                 .frame(width: 350, height: 350)
                 
-                if timerState == .paused {
+                if timeModel.timerState == .paused {
                     PauseTimer {
-                        resume()
+                        timeModel.resume()
                         Haptics.trigger(.light)
                     }
                     .transition(
@@ -96,7 +77,7 @@ struct CountDownTimer: View {
                     )
                 }
                 
-                if showConfetti {
+                if timeModel.showConfetti {
                     Confetti(containerSize: geometry.size)
                         .ignoresSafeArea()
                         .zIndex(10)
@@ -104,31 +85,16 @@ struct CountDownTimer: View {
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .onAppear() {
-                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                scheduleNotification(secondsRemaining: secondsRemaining)
+                timeModel.notifications.cancelNotifications()
+                timeModel.notifications.scheduleNotification(secondsRemaining: timeModel.secondsRemaining)
             }
             .onReceive(timer) { _ in
-                guard timerState == .running else { return }
-                
-                if secondsRemaining > 0 {
-                    secondsRemaining -= 1
-                } else {
-                    timerState = .finished
-                    withAnimation() {
-                        showConfetti = true
-                    }
-                    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                }
+                timeModel.tic()
             }
         }
-    }
-    
-    func resume() {
-        timerState = .running
-        scheduleNotification(secondsRemaining: secondsRemaining)
     }
 }
 
 #Preview {
-    CountDownTimer(secondsRemaining: 1, totalSeconds: 1)
+    CountDownTimer(seconds: 1)
 }

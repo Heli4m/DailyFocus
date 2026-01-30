@@ -21,7 +21,7 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 if TaskList.isEmpty {
-                    VStack {
+                    VStack { // no tasks view
                         Image(systemName: "sparkles")
                             .font(.system(size: 80))
                             .foregroundStyle(Config.accentColor)
@@ -37,7 +37,7 @@ struct ContentView: View {
                             }
                             
                         
-                        LexendMediumText(text: "Tap the '+' to add your first focus app!", size: 28)
+                        LexendMediumText(text: "Tap the '+' to add your first focus task!", size: 28)
                             .foregroundStyle(Config.primaryText)
                             .monospacedDigit()
                             .multilineTextAlignment(.center)
@@ -45,7 +45,7 @@ struct ContentView: View {
                     }
                 } else {
                     let sortedTasks = TaskList.sorted(by: { $0.priority > $1.priority })
-                    List {
+                    List { // list of tasks
                         ForEach(Array(sortedTasks.enumerated()), id: \.element.id) { index, task in
                             Task(width: geometry.size.width - 30, data: task) {
                                 selectedTask = task
@@ -81,7 +81,7 @@ struct ContentView: View {
                 }
                 
                 VStack {
-                    NewTaskButton() {
+                    NewTaskButton() { // the '+' button
                         selectedTask = nil
                         activeState = .editingTask
                     }
@@ -142,7 +142,7 @@ struct ContentView: View {
                 set: { if !$0 { activeState = nil } }
             )) {
                 if let task = selectedTask {
-                    CountDownTimer(secondsRemaining: task.time * 60, totalSeconds: task.time * 60) // Convert to seconds
+                    CountDownTimer(seconds: task.time * 60) // Convert to seconds
                         .presentationDetents([.large, .medium])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))
