@@ -34,7 +34,9 @@ struct TaskListView: View {
                     value: hasAppeared
                 )
                 .onAppear {
-                    hasAppeared = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        hasAppeared = true
+                    }
                 }
                 .frame(height: 100)
                 .swipeActions(edge: .trailing) {

@@ -11,6 +11,8 @@ import UserNotifications
 
 struct CountDownTimer: View {
     @State private var timeModel: TimerViewModel
+    @Environment(\.scenePhase) var scenePhase
+    @State private var lastActiveDate: Date? = nil
     
     init(seconds: Int) {
         _timeModel = State(wrappedValue: TimerViewModel(initialSeconds: seconds))
@@ -66,6 +68,24 @@ struct CountDownTimer: View {
             }
             .onReceive(timer) { _ in
                 timeModel.tic()
+            }
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .background {
+                lastActiveDate = Date()
+            } else if newPhase == .active {
+                if let lastDate = lastActiveDate, timeModel.timerState == .running {
+                    let timePassed = Int(Date().timeIntervalSince(lastDate))
+                    
+                    withAnimation() {
+                        timeModel.secondsRemaining -= timePassed
+                    }
+                    
+                    if timeModel.secondsRemaining < 0 {
+                        timeModel.secondsRemaining = 0
+                        timeModel.timerState = .finished
+                    }
+                }
             }
         }
     }
