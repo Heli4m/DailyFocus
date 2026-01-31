@@ -8,8 +8,13 @@
 import Foundation
 import UserNotifications
 
-class Notifications {
+class Notifications: NSObject {
     static let shared = Notifications()
+    
+    private override init() {
+        super.init()
+        UNUserNotificationCenter.current().delegate = self
+    }
     
     func cancelNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -26,5 +31,13 @@ class Notifications {
         let request = UNNotificationRequest(identifier: "DailyFocusTimer", content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
+    }
+}
+
+extension Notifications: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
     }
 }

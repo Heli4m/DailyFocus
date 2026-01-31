@@ -13,6 +13,9 @@ struct ContentView: View {
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
     
+    @State private var isshowingSetUp: Bool = false
+    @State private var temporaryTime: Int = 25
+    
     @State private var sparklePulse: Bool = false
     var body: some View {
         GeometryReader { geometry in
@@ -60,23 +63,36 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .openingTask },
-                set: { if !$0 { activeState = nil } }
+                set: { isOpening in
+                    if !isOpening {
+                        activeState = nil
+                        isshowingSetUp = false
+                    }
+                }
             )) {
                 if let _ = selectedTask {
                     TaskUseBar (
-                        onStart: {
-                            activeState = .runningTask
+                        isshowingSetUp: $isshowingSetUp,
+
+                        onStart: { minutes in
+                            temporaryTime = minutes
+                            activeState = nil
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                activeState = .runningTask
+                                isshowingSetUp = false
+                            }
                         },
                         onEdit: {
                             activeState = .editingTask
                         }
                     )
-                    .presentationDetents([.fraction(0.25)])
+                    .presentationDetents([isshowingSetUp ? .medium : .fraction(0.25)])
                     .presentationDragIndicator(.visible)
                     .presentationBackground(Color(Config.bgColor))
                 }
             }
-            
+                        
             .sheet(isPresented: Binding(
                 get: { activeState == .runningTask },
                 set: { if !$0 { activeState = nil } }
