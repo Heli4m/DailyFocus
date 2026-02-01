@@ -15,6 +15,7 @@ struct TaskListView: View {
     @Binding var activeState: AppState?
     
     let deleteTask: (_ task: TaskData) -> Void
+    
     var body: some View {
         let sortedTasks = TaskList.sorted(by: { $0.priority > $1.priority })
         

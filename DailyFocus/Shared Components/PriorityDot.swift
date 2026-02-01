@@ -8,56 +8,60 @@
 import SwiftUI
 
 struct PriorityDotMainView: View {
-    let width: CGFloat = 115
-    let gap: CGFloat = 2.5
-    let leftPadding: CGFloat = 11.25
-    @State var sliderXPos: CGFloat = 11.25
     @Binding var selectedButton: Int
+    @Namespace private var animation
     
     var body: some View {
         ZStack (alignment: .leading) {
-            Rectangle()
+            RoundedRectangle(cornerRadius: 20)
                 .frame(height: 80)
                 .foregroundStyle(Color(Config.itemColor))
-            RoundedRectangle(cornerRadius: 15)
-                .frame(width: 115, height: 40)
-                .foregroundStyle(Config.secondaryText)
-                .offset(x: sliderXPos)
-                .animation(.spring(response: 0.35, dampingFraction: 0.75), value: sliderXPos)
-            HStack (spacing: gap) {
+            HStack (alignment: .center, spacing: 0) {
                 ForEach(1...3, id: \.self) { index in
                     Button {
-                        selectedButton = index
-                        sliderXPos = leftPadding + CGFloat(index - 1) * (width + gap)
+                        withAnimation {
+                            selectedButton = index
+                        }
                         Haptics.trigger(.light)
                     } label: {
-                        PriorityDotButton(index: index, selectedButton: $selectedButton)
+                        ZStack {
+                            Color.clear
+                            PriorityDotButton(index: index, selectedButton: $selectedButton)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 70)
+                        .contentShape(Rectangle())
                     }
-                    .scaleEffect(selectedButton == index ? 1.0 : 0.9)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.5), value: selectedButton)
+                    .buttonStyle(.plain)
+                    .background {
+                        if selectedButton == index {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Config.secondaryText)
+                                .frame(width: 115, height: 40)
+                                .padding()
+                                .matchedGeometryEffect(id: "slider", in: animation)
+                        }
+                    }
                 }
             }
-            .padding(.leading, leftPadding)
+            .padding(.horizontal, 10)
         }
     }
 }
 
 struct PriorityDotButton: View {
-    let width: CGFloat = 115
     let index: Int
     @Binding var selectedButton: Int
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .frame(width: width, height: 40)
-            .foregroundStyle(Config.bgColor.opacity(0.5))
-            .overlay(
-                HStack {
-                    ForEach (0..<index, id: \.self) { _ in
-                        PriorityDot(id: index, selectedButton: $selectedButton)
-                    }
+        ZStack {            
+            HStack {
+                ForEach (0..<index, id: \.self) { _ in
+                    PriorityDot(id: index, selectedButton: $selectedButton)
                 }
-            )
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

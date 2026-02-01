@@ -27,7 +27,7 @@ struct TaskEditBar: View {
     @State var selectedtaskName: String = ""
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
-    @State private var selectedPriority: Int = 1
+    @State private var selectedPriority: Int
     var selectedDuration: Int { // uses some calculation to store duration in minutes
         let hoursToMinutes = hours * 60
         return hoursToMinutes + minutes

@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var temporaryTime: Int = 25
     
     @State private var sparklePulse: Bool = false
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {

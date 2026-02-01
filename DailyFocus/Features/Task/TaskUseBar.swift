@@ -18,30 +18,35 @@ struct TaskUseBar: View {
         ZStack {
             if !isshowingSetUp {
                 Color(Config.bgColor).ignoresSafeArea()
-                HStack {
-                    Button {
-                        onEdit()
-                    } label: {
-                        VStack {
-                            Image(systemName: "pencil.circle.fill")
-                                .font(Font.system(size: 100))
-                            LexendMediumText(text: "Edit", size: 18)
+                VStack {
+                    Spacer()
+                    HStack {
+                        Button {
+                            onEdit()
+                        } label: {
+                            VStack {
+                                Image(systemName: "pencil.circle.fill")
+                                    .font(Font.system(size: 100))
+                                LexendMediumText(text: "Edit", size: 18)
+                            }
+                        }
+                        
+                        Button {
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                isshowingSetUp = true
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: "play.circle.fill")
+                                    .font(Font.system(size: 100))
+                                LexendMediumText(text: "Start", size: 18)
+                            }
                         }
                     }
+                    .transition(.asymmetric(insertion: .identity, removal: .move(edge: .leading).combined(with: .opacity)))
                     
-                    Button {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                            isshowingSetUp = true
-                        }
-                    } label: {
-                        VStack {
-                            Image(systemName: "play.circle.fill")
-                                .font(Font.system(size: 100))
-                            LexendMediumText(text: "Start", size: 18)
-                        }
-                    }
+                    Spacer()
                 }
-                .transition(.asymmetric(insertion: .identity, removal: .move(edge: .leading).combined(with: .opacity)))
             } else {
                 VStack {
                     Spacer()
