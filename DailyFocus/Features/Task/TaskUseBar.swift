@@ -10,6 +10,18 @@ import SwiftUI
 struct TaskUseBar: View {
     @Binding var isshowingSetUp: Bool
     @State private var selectedMinutes: Int = 25
+    let data: TaskData
+    
+    var priorityColor: Color {
+        switch data.priority {
+        case 3:
+            return Config.highPriority
+        case 2:
+            return Config.mediumPriority
+        default:
+            return Config.accentColor
+        }
+    }
     
     var onStart: (Int) -> Void
     var onEdit: () -> Void
@@ -21,28 +33,52 @@ struct TaskUseBar: View {
                 VStack {
                     Spacer()
                     HStack {
-                        Button {
-                            onEdit()
-                        } label: {
-                            VStack {
-                                Image(systemName: "pencil.circle.fill")
-                                    .font(Font.system(size: 100))
-                                LexendMediumText(text: "Edit", size: 18)
+                        VStack {
+                            ForEach(0..<data.priority, id: \.self) { priority in
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(priorityColor)
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 5)
                             }
                         }
+                        .padding(.leading)
                         
-                        Button {
-                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                                isshowingSetUp = true
+                        LexendMediumText(text: data.name, size: 30)
+                            .foregroundStyle(Config.primaryText)
+                        
+                        RoundedRectangle(cornerRadius: 5)
+                            .frame(width: 3, height: 150)
+                            .offset(x: 20)
+                            .foregroundStyle(Config.itemColor)
+                        
+                        Spacer()
+                        VStack {
+                            Button {
+                                onEdit()
+                            } label: {
+                                VStack {
+                                    Image(systemName: "pencil.circle.fill")
+                                        .font(Font.system(size: 90))
+                                }
                             }
-                        } label: {
-                            VStack {
-                                Image(systemName: "play.circle.fill")
-                                    .font(Font.system(size: 100))
-                                LexendMediumText(text: "Start", size: 18)
+                            
+                            
+                            Button {
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                    isshowingSetUp = true
+                                }
+                            } label: {
+                                VStack {
+                                    Image(systemName: "play.circle.fill")
+                                        .font(Font.system(size: 90))
+                                }
                             }
                         }
+                        .padding(.trailing, 30)
+                        
                     }
+                    .padding(.top, 40)
                     .transition(.asymmetric(insertion: .identity, removal: .move(edge: .leading).combined(with: .opacity)))
                     
                     Spacer()
@@ -100,6 +136,11 @@ struct TaskUseBar: View {
                 
                 TaskUseBar(
                     isshowingSetUp: $isShowingSetup,
+                    data: TaskData(
+                        name: "Design Prototype",
+                        time: 30,
+                        priority: 3
+                    ),
                     onStart: { mins in print("Started with \(mins) mins") },
                     onEdit: { print("Edit tapped") }
                 )

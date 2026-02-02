@@ -74,6 +74,7 @@ struct ContentView: View {
                 if let _ = selectedTask {
                     TaskUseBar (
                         isshowingSetUp: $isshowingSetUp,
+                        data: selectedTask!,
 
                         onStart: { minutes in
                             temporaryTime = minutes
