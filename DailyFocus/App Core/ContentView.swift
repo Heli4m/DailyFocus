@@ -13,8 +13,7 @@ struct ContentView: View {
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
     
-    @State private var isshowingSetUp: Bool = false
-    @State private var temporaryTime: Int = 25
+    @State private var selectedMinutes: Int = 25
     
     @State private var sparklePulse: Bool = false
     
@@ -64,32 +63,43 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .openingTask },
-                set: { isOpening in
-                    if !isOpening {
-                        activeState = nil
-                        isshowingSetUp = false
-                    }
-                }
+                set: { if !$0 { activeState = nil }}
             )) {
                 if let _ = selectedTask {
                     TaskUseBar (
-                        isshowingSetUp: $isshowingSetUp,
                         data: selectedTask!,
 
-                        onStart: { minutes in
-                            temporaryTime = minutes
+                        onSetTime: {
                             activeState = nil
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                activeState = .runningTask
-                                isshowingSetUp = false
+                                activeState = .settingFocusTime
                             }
                         },
                         onEdit: {
                             activeState = .editingTask
                         }
                     )
-                    .presentationDetents([isshowingSetUp ? .medium : .fraction(0.25)])
+                    .presentationDetents([.fraction(0.25)])
+                    .presentationDragIndicator(.visible)
+                    .presentationBackground(Color(Config.bgColor))
+                }
+            }
+            
+            .sheet(isPresented: Binding(
+                get: { activeState == .settingFocusTime },
+                set: { if !$0 { activeState = nil }}
+            )) {
+                if let task = selectedTask {
+                    TaskSetTimeBar (
+                        selectedMinutes: $selectedMinutes,
+                        task: task,
+                        
+                        onStart: { minutes in
+                            activeState = .runningTask
+                        }
+                    )
+                    .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
                     .presentationBackground(Color(Config.bgColor))
                 }
@@ -99,8 +109,8 @@ struct ContentView: View {
                 get: { activeState == .runningTask },
                 set: { if !$0 { activeState = nil } }
             )) {
-                if let task = selectedTask {
-                    CountDownTimer(seconds: task.time * 60) // Convert to seconds
+                if let _ = selectedTask {
+                    CountDownTimer(seconds: selectedMinutes * 60) // Convert to seconds
                         .presentationDetents([.large, .medium])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Color(Config.bgColor))

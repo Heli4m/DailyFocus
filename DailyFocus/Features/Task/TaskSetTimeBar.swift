@@ -1,0 +1,89 @@
+//
+//  TaskSetTimeBar.swift
+//  DailyFocus
+//
+//  Created by Liam Ngo on 3/2/26.
+//
+
+import SwiftUI
+
+struct TaskSetTimeBar: View {
+    @Namespace private var animation
+    @Binding var selectedMinutes: Int
+    let task: TaskData
+    let timeList = [15, 30, 45, 60]
+    
+    var onStart: (Int) -> Void
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            LexendMediumText(text: "Choose Duration", size: 24)
+                .foregroundStyle(Config.primaryText)
+                .padding()
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Config.itemColor)
+                    .frame(width: 375, height: 60)
+                
+                HStack (alignment: .center, spacing: 0) {
+                    ForEach(timeList, id: \.self) { time in
+                        Button {
+                            withAnimation {
+                                selectedMinutes = time
+                            }
+                            Haptics.trigger(.light)
+                        } label: {
+                            ZStack {
+                                Color.clear
+                                LexendMediumText(text: "\(time)", size: 20)
+                                    .foregroundStyle(Config.primaryText)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 70)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .background {
+                            if selectedMinutes == time {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Config.secondaryText)
+                                    .frame(width: 70, height: 40)
+                                    .padding()
+                                    .matchedGeometryEffect(id: "slider", in: animation)
+                            }
+                        }
+                        
+                    }
+                }
+                .padding(.horizontal, 10)
+            }
+            
+            Spacer()
+            
+            Button {
+                onStart(selectedMinutes)
+            } label: {
+                LexendMediumText(text: "Begin Focus", size: 24)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Config.accentColor)
+                    .foregroundStyle(Config.primaryText)
+                    .cornerRadius(20)
+            }
+            .padding()
+        }    }
+}
+
+#Preview {
+    TaskSetTimeBar(
+        selectedMinutes: .constant(25),
+        task: TaskData(
+            name: "Mock Task",
+            time: 10,
+            priority: 2
+        ),
+        onStart: { mins in print("Started with \(mins) mins") }
+    )
+}
