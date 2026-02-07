@@ -65,7 +65,7 @@ struct ContentView: View {
                 get: { activeState == .openingTask },
                 set: { if !$0 { activeState = nil }}
             )) {
-                if let _ = selectedTask {
+                if let task = selectedTask {
                     TaskUseBar (
                         data: selectedTask!,
 
@@ -78,6 +78,10 @@ struct ContentView: View {
                         },
                         onEdit: {
                             activeState = .editingTask
+                        },
+                        onStart: {
+                            selectedMinutes = task.time
+                            activeState = .runningTask
                         }
                     )
                     .presentationDetents([.fraction(0.25)])

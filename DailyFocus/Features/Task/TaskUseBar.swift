@@ -23,6 +23,7 @@ struct TaskUseBar: View {
     
     var onSetTime: () -> Void
     var onEdit: () -> Void
+    var onStart: () -> Void
     
     var body: some View {
         ZStack {
@@ -56,17 +57,23 @@ struct TaskUseBar: View {
                         } label: {
                             VStack {
                                 Image(systemName: "pencil.circle.fill")
-                                    .font(Font.system(size: 90))
+                                    .font(Font.system(size: 80))
                             }
                         }
                         
                         
                         Button {
-                            onSetTime()
+                            if data.time >= 15 {
+                                onSetTime()
+                                Haptics.trigger(.medium)
+                            } else {
+                                onStart()
+                                Haptics.trigger(.medium)
+                            }
                         } label: {
                             VStack {
                                 Image(systemName: "play.circle.fill")
-                                    .font(Font.system(size: 90))
+                                    .font(Font.system(size: 80))
                             }
                         }
                     }
@@ -97,7 +104,8 @@ struct TaskUseBar: View {
                         priority: 3
                     ),
                     onSetTime: { print("Set time")},
-                    onEdit: { print("Edit tapped") }
+                    onEdit: { print("Edit tapped")},
+                    onStart: { print("Start tapped")}
                 )
             }
             .frame(height: 300)
