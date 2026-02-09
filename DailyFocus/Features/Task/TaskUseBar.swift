@@ -45,12 +45,13 @@ struct TaskUseBar: View {
                     LexendMediumText(text: data.name, size: 30)
                         .foregroundStyle(Config.primaryText)
                     
+                    Spacer()
+                    
                     RoundedRectangle(cornerRadius: 5)
                         .frame(width: 3, height: 150)
-                        .offset(x: 20)
+                        .offset(x: -20)
                         .foregroundStyle(Config.itemColor)
                     
-                    Spacer()
                     VStack {
                         Button {
                             onEdit()

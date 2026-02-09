@@ -23,20 +23,25 @@ struct ContentView: View {
                 Color(Config.bgColor)
                     .ignoresSafeArea()
                 
-                HomeView(
-                    geometry: geometry,
-                    hasAppeared: $hasAppeared,
-                    selectedTask: $selectedTask,
-                    activeState: $activeState,
-                    deleteTask: deleteTask,
-                    TaskList: TaskList
-                )
+                if activeState == .runningTask {
+                    CountDownTimer(seconds: selectedMinutes * 60) // Convert to seconds
+                        .tag(Optional<AppState>.some(.runningTask))
+                        .transition(.move(edge: .trailing))
+                } else {
+                    HomeView(
+                        geometry: geometry,
+                        hasAppeared: $hasAppeared,
+                        selectedTask: $selectedTask,
+                        activeState: $activeState,
+                        deleteTask: deleteTask,
+                        TaskList: TaskList
+                    )
+                }
             }
             
             .sheet(isPresented: Binding(
                 get: { activeState == .editingTask },
                 set: { if !$0 {
-                    activeState = nil
                     selectedTask = nil
                 } }
             )) {
@@ -63,7 +68,7 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .openingTask },
-                set: { if !$0 { activeState = nil }}
+                set: { if !$0 {  }}
             )) {
                 if let task = selectedTask {
                     TaskUseBar (
@@ -92,7 +97,7 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .settingFocusTime },
-                set: { if !$0 { activeState = nil }}
+                set: { if !$0 {  }}
             )) {
                 if let task = selectedTask {
                     TaskSetTimeBar (
@@ -100,24 +105,14 @@ struct ContentView: View {
                         task: task,
                         
                         onStart: { minutes in
-                            activeState = .runningTask
+                            withAnimation {
+                                activeState = .runningTask
+                            }
                         }
                     )
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
                     .presentationBackground(Color(Config.bgColor))
-                }
-            }
-                        
-            .sheet(isPresented: Binding(
-                get: { activeState == .runningTask },
-                set: { if !$0 { activeState = nil } }
-            )) {
-                if let _ = selectedTask {
-                    CountDownTimer(seconds: selectedMinutes * 60) // Convert to seconds
-                        .presentationDetents([.large, .medium])
-                        .presentationDragIndicator(.visible)
-                        .presentationBackground(Color(Config.bgColor))
                 }
             }
         }
@@ -133,6 +128,12 @@ struct ContentView: View {
     func deleteTask( _ task: TaskData) {
         if let index = TaskList.firstIndex(where: { $0.id == task.id }) {
             TaskList.remove(at: index)
+        }
+    }
+    
+    private func goTo (_ next: AppState) {
+        withAnimation {
+            activeState = next
         }
     }
 }
