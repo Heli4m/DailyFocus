@@ -12,34 +12,42 @@ struct PauseTimer: View {
 
     @State private var showPlay = false
     @State private var scale: CGFloat = 1.0
+    @Binding var appState: AppState?
 
     var body: some View {
-        ZStack {
-            Rectangle()
-                .foregroundStyle(Color.black.opacity(0.5))
-                .ignoresSafeArea()
-
+        GeometryReader { geometry in
             ZStack {
-                if showPlay {
-                    LexendPlayShape()
-                        .transition(.scale.combined(with: .opacity))
-                } else {
-                    LexendPauseShape()
-                        .transition(.opacity)
+                Rectangle()
+                    .foregroundStyle(Color.black.opacity(0.5))
+                    .ignoresSafeArea()
+                
+                ZStack {
+                    if showPlay {
+                        LexendPlayShape()
+                            .transition(.scale.combined(with: .opacity))
+                    } else {
+                        LexendPauseShape()
+                            .transition(.opacity)
+                    }
                 }
-            }
-            .frame(width: 70, height: 70)
-            .foregroundStyle(Config.bgColor)
-            .scaleEffect(scale)
-        }
-        .onTapGesture {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
-                showPlay = true
-                scale = 1.3
-            }
+                .frame(width: 70, height: 70)
+                .foregroundStyle(Config.bgColor)
+                .scaleEffect(scale)
+                
+                if !showPlay {
+                    TimerChangeButtons(appState: $appState)
+                }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                onResume()
+            }
+            .onTapGesture {
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
+                    showPlay = true
+                    scale = 1.3
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    onResume()
+                }
             }
         }
     }

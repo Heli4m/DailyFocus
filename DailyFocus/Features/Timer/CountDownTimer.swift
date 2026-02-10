@@ -13,9 +13,11 @@ struct CountDownTimer: View {
     @State private var timeModel: TimerViewModel
     @Environment(\.scenePhase) var scenePhase
     @State private var lastActiveDate: Date? = nil
+    @Binding var appState: AppState?
     
-    init(seconds: Int) {
+    init(seconds: Int, appState: Binding<AppState?>) {
         _timeModel = State(wrappedValue: TimerViewModel(initialSeconds: seconds))
+        _appState = appState
     }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -58,7 +60,8 @@ struct CountDownTimer: View {
                 
                 TimerStatusOverlay(
                     timeModel: timeModel,
-                    containerSize: geometry.size
+                    containerSize: geometry.size,
+                    appState: $appState
                 )
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -89,8 +92,4 @@ struct CountDownTimer: View {
             }
         }
     }
-}
-
-#Preview {
-    CountDownTimer(seconds: 1)
 }

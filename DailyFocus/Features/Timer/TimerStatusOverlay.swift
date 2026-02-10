@@ -10,12 +10,15 @@ import SwiftUI
 struct TimerStatusOverlay: View {
     var timeModel: TimerViewModel
     let containerSize: CGSize
+    @Binding var appState: AppState?
     var body: some View {
         if timeModel.timerState == .paused {
-            PauseTimer {
-                timeModel.resume()
-                Haptics.trigger(.light)
-            }
+            PauseTimer (
+                onResume: {
+                    timeModel.resume()
+                    Haptics.trigger(.light)
+                },
+                appState: $appState)
             .transition(
                 .asymmetric(
                     insertion: .move(edge: .bottom).combined(with: .opacity),

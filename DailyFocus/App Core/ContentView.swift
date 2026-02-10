@@ -24,7 +24,7 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 if activeState == .runningTask {
-                    CountDownTimer(seconds: selectedMinutes * 60) // Convert to seconds
+                    CountDownTimer(seconds: selectedMinutes * 60, appState: $activeState) // Convert to seconds
                         .tag(Optional<AppState>.some(.runningTask))
                         .transition(.move(edge: .trailing))
                 } else {
