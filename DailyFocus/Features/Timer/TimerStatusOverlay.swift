@@ -10,7 +10,7 @@ import SwiftUI
 struct TimerStatusOverlay: View {
     var timeModel: TimerViewModel
     let containerSize: CGSize
-    @Binding var appState: AppState?
+    let onReturn: () -> Void
     var body: some View {
         if timeModel.timerState == .paused {
             PauseTimer (
@@ -18,7 +18,7 @@ struct TimerStatusOverlay: View {
                     timeModel.resume()
                     Haptics.trigger(.light)
                 },
-                appState: $appState)
+                onReturn: onReturn)
             .transition(
                 .asymmetric(
                     insertion: .move(edge: .bottom).combined(with: .opacity),

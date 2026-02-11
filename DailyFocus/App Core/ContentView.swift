@@ -12,7 +12,7 @@ struct ContentView: View {
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
     
-    @State private var taskRunning: Bool = false
+    @State private var taskRunning: TaskData? = nil
     
     @State private var selectedMinutes: Int = 25
     @State private var selectedTask: TaskData? = nil
@@ -26,7 +26,12 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 if activeState == .runningTask {
-                    CountDownTimer(seconds: selectedMinutes * 60, appState: $activeState) // Convert to seconds
+                    CountDownTimer(
+                        seconds: selectedMinutes * 60,
+                        onReturn: {
+                            activeState = nil
+                        }
+                    ) // Convert to seconds
                         .tag(Optional<AppState>.some(.runningTask))
                         .transition(.move(edge: .trailing))
                 } else {

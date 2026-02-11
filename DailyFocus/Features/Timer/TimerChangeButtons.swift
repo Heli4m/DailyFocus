@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TimerChangeButtons: View {
-    @Binding var appState: AppState?
+    let onReturn: () -> Void
     var body: some View {
         VStack {
             Spacer()
@@ -17,7 +17,7 @@ struct TimerChangeButtons: View {
                 Spacer()
                 
                 Button {
-                    appState = nil
+                    onReturn()
                 } label: {
                     RoundedRectangle(cornerRadius: 20)
                         .foregroundStyle(Config.accentColor.opacity(0.5))

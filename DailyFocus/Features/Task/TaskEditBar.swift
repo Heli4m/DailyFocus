@@ -49,8 +49,6 @@ struct TaskEditBar: View {
         _selectedPriority = State(initialValue: existingTask?.priority ?? 1)
     }
     
-    
-    
     // MAIN VIEW
     var body: some View {
         GeometryReader { geometry in

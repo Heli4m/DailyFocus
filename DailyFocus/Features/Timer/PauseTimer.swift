@@ -9,10 +9,10 @@ import SwiftUI
 
 struct PauseTimer: View {
     let onResume: () -> Void
+    let onReturn: () -> Void
 
     @State private var showPlay = false
     @State private var scale: CGFloat = 1.0
-    @Binding var appState: AppState?
 
     var body: some View {
         GeometryReader { geometry in
@@ -35,7 +35,7 @@ struct PauseTimer: View {
                 .scaleEffect(scale)
                 
                 if !showPlay {
-                    TimerChangeButtons(appState: $appState)
+                    TimerChangeButtons(onReturn: onReturn)
                 }
 
             }
