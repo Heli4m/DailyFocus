@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TaskSetTimeBar: View {
+    @Environment(\.dismiss) var dismiss
     @Namespace private var animation
     @Binding var selectedMinutes: Int
     let task: TaskData
@@ -63,7 +64,10 @@ struct TaskSetTimeBar: View {
             Spacer()
             
             Button {
-                onStart(selectedMinutes)
+                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    onStart(selectedMinutes)
+                }
             } label: {
                 LexendMediumText(text: "Begin Focus", size: 24)
                     .frame(maxWidth: .infinity)

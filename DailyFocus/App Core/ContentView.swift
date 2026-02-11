@@ -9,11 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var activeState: AppState? = nil
-    @State private var selectedTask: TaskData? = nil
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
     
+    @State private var taskRunning: Bool = false
+    
     @State private var selectedMinutes: Int = 25
+    @State private var selectedTask: TaskData? = nil
     
     @State private var sparklePulse: Bool = false
     
@@ -43,6 +45,7 @@ struct ContentView: View {
                 get: { activeState == .editingTask },
                 set: { if !$0 {
                     selectedTask = nil
+                    activeState = nil
                 } }
             )) {
                 TaskEditBar(
@@ -68,7 +71,7 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .openingTask },
-                set: { if !$0 {  }}
+                set: { if !$0 { activeState = nil }}
             )) {
                 if let task = selectedTask {
                     TaskUseBar (
@@ -97,7 +100,7 @@ struct ContentView: View {
             
             .sheet(isPresented: Binding(
                 get: { activeState == .settingFocusTime },
-                set: { if !$0 {  }}
+                set: { if !$0 { activeState = nil }}
             )) {
                 if let task = selectedTask {
                     TaskSetTimeBar (
@@ -105,8 +108,10 @@ struct ContentView: View {
                         task: task,
                         
                         onStart: { minutes in
-                            withAnimation {
-                                activeState = .runningTask
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                withAnimation {
+                                    activeState = .runningTask
+                                }
                             }
                         }
                     )
