@@ -33,10 +33,6 @@ struct PauseTimer: View {
                 .frame(width: 70, height: 70)
                 .foregroundStyle(Config.bgColor)
                 .scaleEffect(scale)
-                
-                if !showPlay {
-                    TimerChangeButtons(onReturn: onReturn)
-                }
 
             }
             .onTapGesture {

@@ -12,7 +12,8 @@ struct ContentView: View {
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
     
-    @State private var taskRunning: TaskData? = nil
+    @State private var selectedTab: TabEnum = .home
+    @State private var taskRunning: Bool = false
     
     @State private var selectedMinutes: Int = 25
     @State private var selectedTask: TaskData? = nil
@@ -25,16 +26,7 @@ struct ContentView: View {
                 Color(Config.bgColor)
                     .ignoresSafeArea()
                 
-                if activeState == .runningTask {
-                    CountDownTimer(
-                        seconds: selectedMinutes * 60,
-                        onReturn: {
-                            activeState = nil
-                        }
-                    ) // Convert to seconds
-                        .tag(Optional<AppState>.some(.runningTask))
-                        .transition(.move(edge: .trailing))
-                } else {
+                TabView (selection: $selectedTab) {
                     HomeView(
                         geometry: geometry,
                         hasAppeared: $hasAppeared,
@@ -43,7 +35,16 @@ struct ContentView: View {
                         deleteTask: deleteTask,
                         TaskList: TaskList
                     )
+                    .tag(TabEnum.home)
+                    
+                    TimerMainContainer(
+                        appState: $activeState,
+                        selectedMinutes: $selectedMinutes
+                    )
+                    .tag(TabEnum.timer)
                 }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .ignoresSafeArea()
             }
             
             .sheet(isPresented: Binding(
@@ -93,8 +94,10 @@ struct ContentView: View {
                             activeState = .editingTask
                         },
                         onStart: {
+                            selectedTab = .timer
                             selectedMinutes = task.time
                             activeState = .runningTask
+                            taskRunning = true
                         }
                     )
                     .presentationDetents([.fraction(0.25)])
@@ -113,6 +116,7 @@ struct ContentView: View {
                         task: task,
                         
                         onStart: { minutes in
+                            selectedTab = .timer
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 withAnimation {
                                     activeState = .runningTask
