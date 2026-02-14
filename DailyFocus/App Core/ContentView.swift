@@ -49,16 +49,27 @@ struct ContentView: View {
                 .disabled(activeState == .finishingTask)
                 
                 if activeState == .finishingTask {
-                    TaskComplete (
-                        selectedMinutes: selectedMinutes,
-                        pauseCount: pauseCount,
-                        completionPercentage: 50,
-                        onContinue: {
-                            print("placehold")
-                        }
-                    )
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .zIndex(10)
+                    if let selectedTask = selectedTask {
+                        let totalTime = Double(selectedTask.time)
+                        let completedTime = Double(selectedMinutes)
+                        let percentage = Int(totalTime == 0 ? 0 : (completedTime / totalTime) * 100)
+
+                        TaskComplete (
+                            selectedMinutes: selectedMinutes,
+                            pauseCount: pauseCount,
+                            completionPercentage: percentage,
+                            onContinue: {
+                                activeState = nil
+                                pauseCount = 0
+                                
+                                withAnimation {
+                                    selectedTab = .home
+                                }
+                            }
+                        )
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .zIndex(10)
+                    }
                 }
             }
             .sheet(isPresented: Binding(

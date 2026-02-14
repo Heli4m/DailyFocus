@@ -29,7 +29,7 @@ struct TaskComplete: View {
                     VStack {
                         StatsShape(title: "Time Focused:", number: String(selectedMinutes), type: "minutes", imageName: "stopwatch.fill")
                         StatsShape(title: "Pause Count:", number: String(pauseCount), type: "times", imageName: "pause.circle.fill")
-                        customStatsShape(title: "Daily Quota:", number: completionPercentage, type: "", imageName: "chart.line.uptrend.xyaxis.circle.fill")
+                        customStatsShape(title: "Task Completion:", number: completionPercentage, type: "", imageName: "chart.line.uptrend.xyaxis.circle.fill")
                     }
                     .padding(.horizontal)
                     .padding(.top)
