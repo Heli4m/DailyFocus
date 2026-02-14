@@ -14,13 +14,19 @@ struct CountDownTimer: View {
     @Environment(\.scenePhase) var scenePhase
     @State private var lastActiveDate: Date? = nil
     let onReturn: () -> Void
+    let onFinish: () -> Void
+    @Binding var pauseCount: Int
     
     init(
         seconds: Int,
-        onReturn: @escaping () -> Void
+        onReturn: @escaping () -> Void,
+        onFinish: @escaping () -> Void,
+        pauseCount: Binding<Int>
     ) {
         self.onReturn = onReturn
         _timeModel = State(wrappedValue: TimerViewModel(initialSeconds: seconds))
+        self.onFinish = onFinish
+        self._pauseCount = pauseCount
     }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -39,6 +45,7 @@ struct CountDownTimer: View {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                             if timeModel.timerState == .running {
                                 timeModel.timerState = .paused
+                                pauseCount += 1
                                 timeModel.notifications.cancelNotifications()
                             } else if timeModel.timerState == .paused {
                                 timeModel.resume()
@@ -74,6 +81,12 @@ struct CountDownTimer: View {
             }
             .onReceive(timer) { _ in
                 timeModel.tic()
+                
+                if timeModel.timerState == .finished {
+                        withAnimation(.spring()) {
+                            onFinish() 
+                        }
+                    }
             }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
@@ -91,6 +104,10 @@ struct CountDownTimer: View {
                         if timeModel.secondsRemaining < 0 {
                             timeModel.secondsRemaining = 0
                             timeModel.timerState = .finished
+                            withAnimation() {
+                                onFinish()
+                            }
+                                
                         }
                     }
                 }

@@ -11,8 +11,9 @@ struct ContentView: View {
     @State private var activeState: AppState? = nil
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
-    
     @State private var selectedTab: TabEnum = .home
+    
+    @State private var pauseCount: Int = 0
     
     @State private var selectedMinutes: Int = 25
     @State private var selectedTask: TaskData? = nil
@@ -38,14 +39,28 @@ struct ContentView: View {
                     
                     TimerMainContainer(
                         appState: $activeState,
-                        selectedMinutes: $selectedMinutes
+                        selectedMinutes: $selectedMinutes,
+                        pauseCount: $pauseCount
                     )
                     .tag(TabEnum.timer)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .ignoresSafeArea()
+                .disabled(activeState == .finishingTask)
+                
+                if activeState == .finishingTask {
+                    TaskComplete (
+                        selectedMinutes: selectedMinutes,
+                        pauseCount: pauseCount,
+                        completionPercentage: 50,
+                        onContinue: {
+                            print("placehold")
+                        }
+                    )
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(10)
+                }
             }
-            
             .sheet(isPresented: Binding(
                 get: { activeState == .editingTask },
                 set: { if !$0 {

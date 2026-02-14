@@ -14,6 +14,7 @@ enum AppState: String, Identifiable {
     case settingFocusTime
     case timerTab
     case runningTask
+    case finishingTask
     
     var id: String { self.rawValue }
 }
