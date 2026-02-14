@@ -77,22 +77,25 @@ struct CountDownTimer: View {
             }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
-            if newPhase == .background {
-                lastActiveDate = Date()
-            } else if newPhase == .active {
-                if let lastDate = lastActiveDate, timeModel.timerState == .running {
-                    let timePassed = Int(Date().timeIntervalSince(lastDate))
-                    
-                    withAnimation() {
-                        timeModel.secondsRemaining -= timePassed
-                    }
-                    
-                    if timeModel.secondsRemaining < 0 {
-                        timeModel.secondsRemaining = 0
-                        timeModel.timerState = .finished
+            if timeModel.timerState == .running {
+                if newPhase == .background {
+                    lastActiveDate = Date()
+                } else if newPhase == .active {
+                    if let lastDate = lastActiveDate, timeModel.timerState == .running {
+                        let timePassed = Int(Date().timeIntervalSince(lastDate))
+                        
+                        withAnimation() {
+                            timeModel.secondsRemaining -= timePassed
+                        }
+                        
+                        if timeModel.secondsRemaining < 0 {
+                            timeModel.secondsRemaining = 0
+                            timeModel.timerState = .finished
+                        }
                     }
                 }
             }
+            
         }
     }
 }

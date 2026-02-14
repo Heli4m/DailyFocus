@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TaskUseBar: View {
+    @Environment(\.dismiss) var dismiss
     let data: TaskData
     
     var priorityColor: Color {
@@ -68,7 +69,10 @@ struct TaskUseBar: View {
                                 onSetTime()
                                 Haptics.trigger(.medium)
                             } else {
-                                onStart()
+                                dismiss()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    onStart()
+                                }
                                 Haptics.trigger(.medium)
                             }
                         } label: {

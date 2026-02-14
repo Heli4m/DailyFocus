@@ -13,7 +13,6 @@ struct ContentView: View {
     @State private var hasAppeared: Bool = false
     
     @State private var selectedTab: TabEnum = .home
-    @State private var taskRunning: Bool = false
     
     @State private var selectedMinutes: Int = 25
     @State private var selectedTask: TaskData? = nil
@@ -94,10 +93,15 @@ struct ContentView: View {
                             activeState = .editingTask
                         },
                         onStart: {
-                            selectedTab = .timer
+                            withAnimation {
+                                selectedTab = .timer
+                            }
                             selectedMinutes = task.time
-                            activeState = .runningTask
-                            taskRunning = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                withAnimation {
+                                    activeState = .runningTask
+                                }
+                            }
                         }
                     )
                     .presentationDetents([.fraction(0.25)])
@@ -116,7 +120,9 @@ struct ContentView: View {
                         task: task,
                         
                         onStart: { minutes in
-                            selectedTab = .timer
+                            withAnimation {
+                                selectedTab = .timer
+                            }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 withAnimation {
                                     activeState = .runningTask
