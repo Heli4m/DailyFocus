@@ -40,7 +40,7 @@ struct TaskListView: View {
                     }
                 }
                 .frame(height: 100)
-                .swipeActions(edge: .trailing) {
+                .swipeActions(edge: .leading) {
                     Button(role: .destructive) {
                         deleteTask(task)
                         Haptics.trigger(.rigid)

@@ -26,11 +26,5 @@ struct TimerStatusOverlay: View {
                 )
             )
         }
-        
-        if timeModel.showConfetti {
-            Confetti(containerSize: containerSize)
-                .ignoresSafeArea()
-                .zIndex(10)
-        }
     }
 }

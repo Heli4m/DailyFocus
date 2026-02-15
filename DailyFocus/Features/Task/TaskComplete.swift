@@ -11,6 +11,8 @@ struct TaskComplete: View {
     let selectedMinutes: Int
     let pauseCount: Int
     let completionPercentage: Int
+    @State private var animatedPercentage: Int = 0
+    @State private var transitionPhases: Int = 0
     
     let onContinue: () -> Void
     
@@ -27,9 +29,21 @@ struct TaskComplete: View {
                         .padding(.top, 70)
                     
                     VStack {
-                        StatsShape(title: "Time Focused:", number: String(selectedMinutes), type: "minutes", imageName: "stopwatch.fill")
-                        StatsShape(title: "Pause Count:", number: String(pauseCount), type: "times", imageName: "pause.circle.fill")
-                        customStatsShape(title: "Task Completion:", number: completionPercentage, type: "", imageName: "chart.line.uptrend.xyaxis.circle.fill")
+                        if transitionPhases >= 1 {
+                            StatsShape(title: "Time Focused:", number: String(selectedMinutes), type: "minutes", imageName: "stopwatch.fill")
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                        }
+                        if transitionPhases >= 2 {
+                            StatsShape(title: "Pause Count:", number: String(pauseCount), type: "times", imageName: "pause.circle.fill")
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                        }
+                        if transitionPhases >= 3 {
+                            customStatsShape(title: "Task Completion:", number: animatedPercentage, type: "", imageName: "chart.line.uptrend.xyaxis.circle.fill")
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                                .onAppear() {
+                                    countUp()
+                                }
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.top)
@@ -38,6 +52,8 @@ struct TaskComplete: View {
                     
                     Button {
                         onContinue()
+                        
+                        Haptics.success()
                     } label: {
                         RoundedRectangle(cornerRadius: 15)
                             .foregroundStyle(Config.accentColor)
@@ -47,6 +63,47 @@ struct TaskComplete: View {
                                     .foregroundStyle(Color(Config.primaryText))
                             }
                     }
+                }
+                
+                if completionPercentage == 100 {
+                    Confetti(containerSize: geometry.size)
+                        .ignoresSafeArea()
+                        .zIndex(10)
+                }
+            }
+        }
+        .onAppear {
+            for i in 1...3 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 1.0) {
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                        transitionPhases = i
+                    }
+                    
+                    if i == 3 && completionPercentage == 100 {
+                        Haptics.success()
+                    } else {
+                        Haptics.trigger(.medium)
+                    }
+                }
+            }
+        }
+    }
+    
+    func countUp() {
+        animatedPercentage = 0
+        
+        let duration: Double = 1.0
+        let steps = completionPercentage
+        let interval = duration/Double(steps)
+        
+        guard completionPercentage > 0 else { return }
+        
+        for i in 0...steps {
+            DispatchQueue.main.asyncAfter(deadline: .now() + (Double(i) * interval)) {
+                self.animatedPercentage = i
+                
+                if i % 20 == 0 {
+                    Haptics.trigger(.light)
                 }
             }
         }

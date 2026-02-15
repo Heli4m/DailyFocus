@@ -16,7 +16,7 @@ struct TimerMainContainer: View {
         ZStack {
             if appState == .runningTask || appState == .finishingTask {
                 CountDownTimer (
-                    seconds: selectedMinutes, // reset this to selectedMinutes * 60 once testing is complete
+                    seconds: selectedMinutes * 60,
                     onReturn: {
                         appState = nil
                     },

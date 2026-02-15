@@ -14,7 +14,6 @@ class TimerViewModel {
     var secondsRemaining: Int
     let totalSeconds: Int
     var isProcessingATap: Bool = false
-    var showConfetti: Bool = false
     var timerState: TimerStates = .running
     let notifications = Notifications.shared
     
@@ -42,9 +41,6 @@ class TimerViewModel {
             secondsRemaining -= 1
         } else {
             timerState = .finished
-            withAnimation {
-                showConfetti = true
-            }
             notifications.cancelNotifications()
         }
     }
