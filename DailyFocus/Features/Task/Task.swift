@@ -11,18 +11,16 @@ struct Task: View {
     let width: CGFloat
     let data: TaskData
     
+    @State private var isPressed: Bool = false
     var isRunning: Bool = false
     
     var onOpen: () -> Void
     
     var priorityColor: Color {
         switch data.priority {
-        case 3:
-            return Config.highPriority
-        case 2:
-            return Config.mediumPriority
-        default:
-            return Config.accentColor
+        case 3: return Config.highPriority
+        case 2: return Config.mediumPriority
+        default: return Config.accentColor
         }
     }
     
@@ -49,6 +47,10 @@ struct Task: View {
                 RoundedRectangle(cornerRadius: 20)
                     .frame(width: width)
                     .frame(maxHeight: .infinity)
+                    .shadow(
+                        color: priorityColor.opacity(isPressed ? 0.3 : 0.1),
+                        radius: isPressed ? 10 : 5, x: 0, y: 5
+                    )
                     .foregroundStyle(Color(Config.itemColor))
                     .overlay (
                         HStack {
@@ -71,8 +73,10 @@ struct Task: View {
                                 }
                             }
                             .padding(.trailing, 30)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
                         }
                     )
+                    .scaleEffect(isPressed ? 0.9 : 1.0)
                     .overlay (alignment: .topLeading) {
                         Circle()
                             .frame(width: 8, height: 8)
@@ -81,6 +85,30 @@ struct Task: View {
                     }
             }
         }
+        .contentShape(Rectangle())
+        .gesture (
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        isPressed = false
+                    }
+                    
+                    Haptics.trigger(.light)
+                    onOpen()
+                }
+        )
+        .onLongPressGesture(minimumDuration: 1.0, pressing: { pressing in
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                self.isPressed = pressing
+            }
+        }, perform: {
+        
+        })
     }
 }
 

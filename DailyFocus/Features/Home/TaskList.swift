@@ -40,9 +40,11 @@ struct TaskListView: View {
                     }
                 }
                 .frame(height: 100)
-                .swipeActions(edge: .leading) {
+                .contextMenu {
                     Button(role: .destructive) {
-                        deleteTask(task)
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                            deleteTask(task)
+                        }
                         Haptics.trigger(.rigid)
                     } label: {
                         Label("", systemImage: "trash")
