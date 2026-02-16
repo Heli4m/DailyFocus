@@ -65,7 +65,7 @@ struct TaskUseBar: View {
                         
                         
                         Button {
-                            if data.time >= 15 {
+                            if data.time > 15 {
                                 onSetTime()
                                 Haptics.trigger(.medium)
                             } else {
