@@ -47,22 +47,6 @@ DailyFocus is not yet a complete project, so stay tuned for future updates and r
 <br>
 
 ### Technical Deep Dive: Choreographed Transitions
-To make the app feel premium, I implemented a "Phase-Based" animation system for the end screen. Instead of views appearing at once, they are staggered using `DispatchQueue` to create a waterfall effect.
-
-```swift
-// Staggering the entrance of stat cards via a phase state
-.onAppear {
-    for i in 1...3 {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.3) {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                transitionPhases = i
-            }
-            Haptics.trigger(.medium) // Tactile feedback for each card "landing"
-        }
-    }
-}
-```
-
 Technical Deep Dive: The Odometer Effect
 I built a custom "count-up" logic to animate integers. This transforms static data into a dynamic visual experience as the user sees their completion percentage climb in real-time.
 
