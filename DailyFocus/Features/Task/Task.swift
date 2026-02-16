@@ -85,30 +85,20 @@ struct Task: View {
                     }
             }
         }
-        .contentShape(Rectangle())
-        .gesture (
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                        isPressed = true
-                    }
-                }
-                .onEnded { _ in
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                        isPressed = false
-                    }
-                    
-                    Haptics.trigger(.light)
-                    onOpen()
-                }
-        )
-        .onLongPressGesture(minimumDuration: 1.0, pressing: { pressing in
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                self.isPressed = pressing
+        .buttonStyle(SquishButtonStyle())
+    }
+}
+
+struct SquishyButtonStyle: ButtonStyle {
+    @Binding var isPressed: Bool
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .onChange(of: configuration.isPressed) { oldValue, newValue in
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                   isPressed = newValue
+               }
             }
-        }, perform: {
-        
-        })
     }
 }
 
