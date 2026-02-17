@@ -10,4 +10,5 @@ import Foundation
 enum TabEnum {
     case home
     case timer
+    case test
 }

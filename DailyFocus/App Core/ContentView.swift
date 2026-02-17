@@ -20,6 +20,10 @@ struct ContentView: View {
     
     @State private var sparklePulse: Bool = false
     
+    private var isShowingTabBar: Bool {
+        !(selectedTab == .timer && activeState == .runningTask)
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -48,6 +52,12 @@ struct ContentView: View {
                 .ignoresSafeArea()
                 .disabled(activeState == .finishingTask)
                 
+
+                if isShowingTabBar {
+                    TabsBar(currentTab: $selectedTab, geometry: geometry)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            
                 if activeState == .finishingTask {
                     if let selectedTask = selectedTask {
                         let totalTime = Double(selectedTask.time)
