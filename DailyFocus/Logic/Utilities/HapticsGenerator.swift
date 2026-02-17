@@ -20,4 +20,16 @@ struct Haptics {
         generator.prepare()
         generator.notificationOccurred(.success)
     }
+    
+    static func warning() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(.warning)
+    }
+    
+    static func error() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(.error)
+    }
 }

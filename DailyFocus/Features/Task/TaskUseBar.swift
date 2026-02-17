@@ -45,12 +45,15 @@ struct TaskUseBar: View {
                     
                     LexendMediumText(text: data.name, size: 30)
                         .foregroundStyle(Config.primaryText)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
+                        .layoutPriority(1)
                     
                     Spacer()
                     
                     RoundedRectangle(cornerRadius: 5)
                         .frame(width: 3, height: 150)
-                        .offset(x: -20)
+                        .padding(.trailing, 20)
                         .foregroundStyle(Config.itemColor)
                     
                     VStack {
@@ -104,7 +107,7 @@ struct TaskUseBar: View {
                 
                 TaskUseBar(
                     data: TaskData(
-                        name: "Design Prototype",
+                        name: "Polish the Essay",
                         time: 30,
                         priority: 3
                     ),

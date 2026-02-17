@@ -10,8 +10,6 @@ import SwiftUI
 // TaskEditBar is displayed in .sheet
 struct TaskEditBar: View {
     
-    
-    
     // VARIABLES & INIT
     @Environment(\.dismiss) var dismiss // allows the code to dismiss .sheet
     var onCreate: (TaskData) -> Void // function that can have code put in after, for task creation
@@ -120,10 +118,18 @@ struct TaskEditBar: View {
 
 struct BasicForm: View {
     @Binding var selectedtaskName: String
+    var textLimit: Int = 30
     
     var body: some View {
-        LexendRegularText(text: "Task Name:", size: 18)
-            .foregroundStyle(Color(Config.primaryText))
+        HStack {
+            LexendRegularText(text: "Task Name:", size: 18)
+                .foregroundStyle(Color(Config.primaryText))
+            
+            Spacer()
+            
+            LexendRegularText(text: "\(selectedtaskName.count)/\(textLimit)", size: 18)
+                .foregroundStyle(selectedtaskName.count == textLimit ? Config.highPriority : Config.secondaryText)
+        }
         TextField(
             text: $selectedtaskName,
             prompt: Text("New Task")
@@ -137,6 +143,12 @@ struct BasicForm: View {
             .background(Color(Config.itemColor))
             .foregroundStyle(Config.accentColor)
             .cornerRadius(15)
+            .onChange(of: selectedtaskName) {
+                if selectedtaskName.count > textLimit {
+                    selectedtaskName = String(selectedtaskName.prefix(textLimit))
+                    Haptics.warning()
+                }
+            }
     }
 }
 
