@@ -66,7 +66,7 @@ struct TaskSetTimeBar: View {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Config.itemColor)
                         .frame(width: 70, height: 60)
-
+                    
                     Button {
                         withAnimation {
                             selectedMinutes = task.time
@@ -76,7 +76,7 @@ struct TaskSetTimeBar: View {
                         ZStack {
                             Color.clear
                             LexendMediumText(text: "\(task.time)", size: 20)
-                                .foregroundStyle(Config.primaryText)
+                                .foregroundStyle(timeList.contains(task.time) ? Config.accentColor : Config.primaryText)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 70)
@@ -84,7 +84,7 @@ struct TaskSetTimeBar: View {
                     }
                     .buttonStyle(.plain)
                     .background {
-                        if selectedMinutes == task.time {
+                        if selectedMinutes == task.time && !timeList.contains(task.time) {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Config.secondaryText)
                                 .frame(width: 60, height: 40)
@@ -94,6 +94,7 @@ struct TaskSetTimeBar: View {
                     }
                 }
                 .padding(.trailing, 10)
+                .padding(.leading, 5)
             }
             
             Spacer()
@@ -120,7 +121,7 @@ struct TaskSetTimeBar: View {
         selectedMinutes: .constant(25),
         task: TaskData(
             name: "Mock Task",
-            time: 61,
+            time: 15,
             priority: 2
         ),
         onStart: { mins in print("Started with \(mins) mins") }

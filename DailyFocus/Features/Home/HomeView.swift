@@ -34,7 +34,7 @@ struct HomeView: View {
                 selectedTask = nil
                 activeState = .editingTask
             }
-            .position(x: geometry.size.width - 75, y: geometry.size.height - 50)
+            .position(x: geometry.size.width - 75, y: geometry.size.height - 90)
         }
     }
 }
