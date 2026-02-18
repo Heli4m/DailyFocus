@@ -16,19 +16,19 @@ struct NewTaskButton: View {
     var body: some View {
         Button {
             withAnimation(.interpolatingSpring(stiffness: 100, damping: 10)) {
-                rotation += 1440
+                rotation += Config.Time.addButtonSpin
             }
             
             action()
         } label: {
             ZStack {
                 Circle()
-                    .stroke(Color(Config.itemColor.opacity(0.5)), lineWidth: 4)
-                    .frame(width: 82, height: 82)
+                    .stroke(Color(Config.Colors.item.opacity(0.5)), lineWidth: 4)
+                    .frame(width: Config.Layout.addButtonSizeExternal, height: Config.Layout.addButtonSizeExternal)
                 
                 Circle()
-                    .fill(Config.accentColor)
-                    .frame(width: 75, height: 75)
+                    .fill(Config.Colors.accent)
+                    .frame(width: Config.Layout.addButtonSizeInternal, height: Config.Layout.addButtonSizeInternal)
                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 4)
                 
                 Cross()
@@ -45,25 +45,24 @@ struct TaskSetTimeBar: View {
     @Namespace private var animation
     @Binding var selectedMinutes: Int
     let task: TaskData
-    let timeList = [15, 30, 45, 60]
     
     var onStart: (Int) -> Void
     
     var body: some View {
         VStack {
             Spacer()
-            LexendMediumText(text: "Choose Duration", size: 24)
-                .foregroundStyle(Config.primaryText)
+            LexendMediumText(text: "Choose Duration", size: Config.Layout.standardTitleTextSize)
+                .foregroundStyle(Config.Colors.primaryText)
                 .padding()
             
             HStack (spacing: 5) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Config.itemColor)
-                        .frame(width: 290, height: 60)
+                    RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
+                        .fill(Config.Colors.item)
+                        .frame(width: Config.Layout.bgtimePickerWidth, height: Config.Layout.bgtimePickerHeight)
                     
                     HStack (alignment: .center, spacing: 0) {
-                        ForEach(timeList, id: \.self) { time in
+                        ForEach(Config.Defaults.timeSelections, id: \.self) { time in
                             Button {
                                 withAnimation {
                                     selectedMinutes = time
@@ -72,18 +71,18 @@ struct TaskSetTimeBar: View {
                             } label: {
                                 ZStack {
                                     Color.clear
-                                    LexendMediumText(text: "\(time)", size: 20)
-                                        .foregroundStyle(Config.primaryText)
+                                    LexendMediumText(text: "\(time)", size: Config.Layout.pickerTextSize)
+                                        .foregroundStyle(Config.Colors.primaryText)
                                 }
-                                .frame(width: 65, height: 70)
+                                .frame(width: Config.Layout.timePickerIndividualWidth, height: Config.Layout.timePickerIndividualHeight)
                                 .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                             .background {
                                 if selectedMinutes == time {
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .fill(Config.secondaryText)
-                                        .frame(width: 60, height: 40)
+                                    RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
+                                        .fill(Config.Colors.secondaryText)
+                                        .frame(width: Config.Layout.timePickerSliderWidth, height: Config.Layout.timePickerSliderHeight)
                                         .padding()
                                         .matchedGeometryEffect(id: "slider", in: animation)
                                 }
@@ -93,12 +92,12 @@ struct TaskSetTimeBar: View {
                         }
                     }
                 }
-                .padding(.leading, 20)
+                .padding(.leading, Config.Layout.standardPaddingLarge)
                 
                 ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Config.itemColor)
-                        .frame(width: 70, height: 60)
+                    RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
+                        .fill(Config.Colors.item)
+                        .frame(width: Config.Layout.customTimeBoxWidth, height: Config.Layout.customTimeBoxHeight)
                     
                     Button {
                         withAnimation {
@@ -108,8 +107,8 @@ struct TaskSetTimeBar: View {
                     } label: {
                         ZStack {
                             Color.clear
-                            LexendMediumText(text: "\(task.time)", size: 20)
-                                .foregroundStyle(timeList.contains(task.time) ? Config.accentColor : Config.primaryText)
+                            LexendMediumText(text: "\(task.time)", size: Config.Layout.pickerTextSize)
+                                .foregroundStyle(Config.Defaults.timeSelections.contains(task.time) ? Config.Colors.accent : Config.Colors.primaryText)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 70)
@@ -117,33 +116,33 @@ struct TaskSetTimeBar: View {
                     }
                     .buttonStyle(.plain)
                     .background {
-                        if selectedMinutes == task.time && !timeList.contains(task.time) {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Config.secondaryText)
+                        if selectedMinutes == task.time && !Config.Defaults.timeSelections.contains(task.time) {
+                            RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
+                                .fill(Config.Colors.secondaryText)
                                 .frame(width: 60, height: 40)
                                 .padding()
                                 .matchedGeometryEffect(id: "slider", in: animation)
                         }
                     }
                 }
-                .padding(.trailing, 10)
-                .padding(.leading, 5)
+                .padding(.trailing, Config.Layout.standardPaddingMedium)
+                .padding(.leading, Config.Layout.standardPaddingSmall)
             }
             
             Spacer()
             
             Button {
                 dismiss()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + Config.Time.standardTransitionSpeed) {
                     onStart(selectedMinutes)
                 }
             } label: {
-                LexendMediumText(text: "Begin Focus", size: 24)
+                LexendMediumText(text: "Begin Focus", size: Config.Layout.standardTitleTextSize)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Config.accentColor)
-                    .foregroundStyle(Config.primaryText)
-                    .cornerRadius(20)
+                    .background(Config.Colors.accent)
+                    .foregroundStyle(Config.Colors.primaryText)
+                    .cornerRadius(Config.Layout.mainBigCornerRadius)
             }
             .padding()
         }    }
@@ -153,40 +152,29 @@ struct TaskUseBar: View {
     @Environment(\.dismiss) var dismiss
     let data: TaskData
     
-    var priorityColor: Color {
-        switch data.priority {
-        case 3:
-            return Config.highPriority
-        case 2:
-            return Config.mediumPriority
-        default:
-            return Config.accentColor
-        }
-    }
-    
     var onSetTime: () -> Void
     var onEdit: () -> Void
     var onStart: () -> Void
     
     var body: some View {
         ZStack {
-            Color(Config.bgColor).ignoresSafeArea()
+            Color(Config.Colors.background).ignoresSafeArea()
             VStack {
                 Spacer()
                 HStack {
                     VStack {
                         ForEach(0..<data.priority, id: \.self) { priority in
                             Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(priorityColor)
+                                .frame(width: Config.Layout.priorityDotSize, height: Config.Layout.priorityDotSize)
+                                .foregroundStyle(data.priorityColor)
                                 .padding(.horizontal)
-                                .padding(.vertical, 5)
+                                .padding(.vertical, Config.Layout.standardPaddingSmall)
                         }
                     }
                     .padding(.leading)
                     
                     LexendMediumText(text: data.name, size: 30)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                         .lineLimit(2)
                         .minimumScaleFactor(0.7)
                         .layoutPriority(1)
@@ -194,9 +182,9 @@ struct TaskUseBar: View {
                     Spacer()
                     
                     RoundedRectangle(cornerRadius: 5)
-                        .frame(width: 3, height: 150)
-                        .padding(.trailing, 20)
-                        .foregroundStyle(Config.itemColor)
+                        .frame(width: Config.Layout.dividerWidth, height: Config.Layout.dividerHeight)
+                        .padding(.trailing, Config.Layout.standardPaddingLarge)
+                        .foregroundStyle(Config.Colors.item)
                     
                     VStack {
                         Button {
@@ -204,18 +192,18 @@ struct TaskUseBar: View {
                         } label: {
                             VStack {
                                 Image(systemName: "pencil.circle.fill")
-                                    .font(Font.system(size: 80))
+                                    .font(Font.system(size: Config.Layout.iconButtonSize))
                             }
                         }
                         
                         
                         Button {
-                            if data.time > 15 {
+                            if data.time > Config.Limits.quickStartMax {
                                 onSetTime()
                                 Haptics.trigger(.medium)
                             } else {
                                 dismiss()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Config.Time.standardTransitionSpeed) {
                                     onStart()
                                 }
                                 Haptics.trigger(.medium)
@@ -223,14 +211,14 @@ struct TaskUseBar: View {
                         } label: {
                             VStack {
                                 Image(systemName: "play.circle.fill")
-                                    .font(Font.system(size: 80))
+                                    .font(Font.system(size: Config.Layout.iconButtonSize))
                             }
                         }
                     }
                     .padding(.trailing, 30)
                     
                 }
-                .padding(.top, 40)
+                .padding(.top, Config.Layout.standardPaddingExtraLarge)
                 .transition(.asymmetric(insertion: .identity, removal: .move(edge: .leading).combined(with: .opacity)))
                 
                 Spacer()
@@ -249,7 +237,7 @@ struct TaskEditBar: View {
     
     // stores color states for the done button
     var doneButtonColor: Color {
-        (selectedtaskName.isEmpty || selectedDuration == 0) ? Config.inactiveAccentColor : Config.accentColor
+        (selectedtaskName.isEmpty || selectedDuration == 0) ? Config.Colors.inactiveAccent : Config.Colors.accent
     }
     
     // user filled variables
@@ -288,22 +276,22 @@ struct TaskEditBar: View {
                     
                     HStack {
                         HStack {
-                            WheelForm(selectedDuration: $hours, range: 0..<24, label: "Hours")
-                            LexendMediumText(text: ":", size: 18)
-                                .foregroundStyle(Config.accentColor)
-                            WheelForm(selectedDuration: $minutes, range: 0..<60, label: "Minutes")
+                            WheelForm(selectedDuration: $hours, range: 0..<Config.Limits.maxHours, label: "Hours")
+                            LexendMediumText(text: ":", size: Config.Layout.standardSmallTextSize)
+                                .foregroundStyle(Config.Colors.accent)
+                            WheelForm(selectedDuration: $minutes, range: 0..<Config.Limits.maxMinutes, label: "Minutes")
                         }
                         .padding()
                     }
-                    .background(Color(Config.itemColor))
-                    .cornerRadius(15)
+                    .background(Color(Config.Colors.item))
+                    .cornerRadius(Config.Layout.mainCornerRadius)
                     .padding(.top)
                     
                     VStack (alignment: .leading) {
-                        LexendRegularText(text: "Priority Level", size: 18)
-                            .foregroundStyle(Color(Config.primaryText))
+                        LexendRegularText(text: "Priority Level", size: Config.Layout.standardSmallTextSize)
+                            .foregroundStyle(Color(Config.Colors.primaryText))
                         PriorityDotMainView(selectedButton: $selectedPriority)
-                            .cornerRadius(15)
+                            .cornerRadius(Config.Layout.mainCornerRadius)
                     }
                     .padding(.top)
                     
@@ -332,12 +320,12 @@ struct TaskEditBar: View {
                             dismiss() // closes the .sheet
                         }
                     } label: {
-                        RoundedRectangle(cornerRadius: 15)
+                        RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
                             .foregroundStyle(doneButtonColor)
                             .frame(width: max(0, geometry.size.width - 30), height: 40)
                             .overlay {
-                                LexendMediumText(text: "Done", size: 18)
-                                    .foregroundStyle(Color(Config.primaryText))
+                                LexendMediumText(text: "Done", size: Config.Layout.standardSmallTextSize)
+                                    .foregroundStyle(Color(Config.Colors.primaryText))
                             }
                     }
                 }
@@ -349,31 +337,31 @@ struct TaskEditBar: View {
 
 struct BasicForm: View {
     @Binding var selectedtaskName: String
-    var textLimit: Int = 30
+    var textLimit: Int = Config.Limits.taskNameMax
     
     var body: some View {
         HStack {
-            LexendRegularText(text: "Task Name:", size: 18)
-                .foregroundStyle(Color(Config.primaryText))
+            LexendRegularText(text: "Task Name:", size: Config.Layout.standardSmallTextSize)
+                .foregroundStyle(Color(Config.Colors.primaryText))
             
             Spacer()
             
-            LexendRegularText(text: "\(selectedtaskName.count)/\(textLimit)", size: 18)
-                .foregroundStyle(selectedtaskName.count == textLimit ? Config.highPriority : Config.secondaryText)
+            LexendRegularText(text: "\(selectedtaskName.count)/\(textLimit)", size: Config.Layout.standardSmallTextSize)
+                .foregroundStyle(selectedtaskName.count == textLimit ? Config.Colors.highPriority : Config.Colors.secondaryText)
         }
         TextField(
             text: $selectedtaskName,
             prompt: Text("New Task")
-                .foregroundStyle(Config.accentColor.opacity(0.2))
+                .foregroundStyle(Config.Colors.accent.opacity(0.2))
         ) {
             Text("Task Name")
         }
             .frame(height: 50)
-            .font(Font.custom("Lexend-Regular", size: 18))
+            .font(Font.custom("Lexend-Regular", size: Config.Layout.standardSmallTextSize))
             .padding(.horizontal)
-            .background(Color(Config.itemColor))
-            .foregroundStyle(Config.accentColor)
-            .cornerRadius(15)
+            .background(Color(Config.Colors.item))
+            .foregroundStyle(Config.Colors.accent)
+            .cornerRadius(Config.Layout.mainCornerRadius)
             .onChange(of: selectedtaskName) {
                 if selectedtaskName.count > textLimit {
                     selectedtaskName = String(selectedtaskName.prefix(textLimit))
@@ -392,29 +380,15 @@ struct WheelForm: View {
         VStack {
             Picker(label, selection: $selectedDuration) {
                 ForEach (range, id: \.self) { duration in
-                    LexendRegularText(text: "\(duration)", size: 18)
-                        .foregroundStyle(Color(Config.accentColor))
+                    LexendRegularText(text: "\(duration)", size: Config.Layout.standardSmallTextSize)
+                        .foregroundStyle(Color(Config.Colors.accent))
                         .tag(duration)
                 }
             }
             .pickerStyle(.wheel)
             
-            LexendMediumText(text: label, size: 18)
-                .foregroundStyle(Config.primaryText)
+            LexendMediumText(text: label, size: Config.Layout.standardSmallTextSize)
+                .foregroundStyle(Config.Colors.primaryText)
         }
-    }
-}
-
-struct TaskData: Identifiable, Codable, Equatable {
-    let id: UUID
-    let name: String
-    let time: Int
-    let priority: Int
-    
-    init(id: UUID = UUID(), name: String, time: Int, priority: Int) {
-        self.id = id
-        self.name = name
-        self.time = time
-        self.priority = priority
     }
 }
