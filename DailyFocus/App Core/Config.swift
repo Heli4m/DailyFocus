@@ -23,3 +23,26 @@ struct Config {
     static let primaryText = Color(red: 232/255, green: 234/255, blue: 237/255)
     static let secondaryText = Color(red: 154/255, green: 160/255, blue: 166/255)
 }
+
+enum AppState: String, Identifiable {
+    case editingTask
+    case openingTask
+    case settingFocusTime
+    case timerTab
+    case runningTask
+    case finishingTask
+    
+    var id: String { self.rawValue }
+}
+
+enum TimerStates {
+    case running
+    case paused
+    case finished
+}
+
+enum TabEnum {
+    case home
+    case timer
+}
+
