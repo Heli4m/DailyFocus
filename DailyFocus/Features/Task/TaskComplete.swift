@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TaskComplete: View {
-    let selectedMinutes: Int
+    let completedMinutes: Int
     let pauseCount: Int
     let completionPercentage: Int
     @State private var animatedPercentage: Int = 0
@@ -30,7 +30,7 @@ struct TaskComplete: View {
                     
                     VStack {
                         if transitionPhases >= 1 {
-                            StatsShape(title: "Time Focused:", number: String(selectedMinutes), type: "minutes", imageName: "stopwatch.fill")
+                            StatsShape(title: "Time Focused:", number: String(completedMinutes), type: "minutes", imageName: "stopwatch.fill")
                                 .transition(.move(edge: .trailing).combined(with: .opacity))
                         }
                         if transitionPhases >= 2 {
@@ -189,7 +189,7 @@ struct customStatsShape: View {
 
 #Preview {
     TaskComplete(
-        selectedMinutes: 30,
+        completedMinutes: 30,
         pauseCount: 1,
         completionPercentage: 100,
         onContinue: {

@@ -11,16 +11,20 @@ struct TimerMainContainer: View {
     @Binding var appState: AppState?
     @Binding var selectedMinutes: Int
     @Binding var pauseCount: Int
+    @Binding var timerModel: TimerViewModel
     
     var body: some View {
         ZStack {
             if appState == .runningTask || appState == .finishingTask {
                 CountDownTimer (
-                    seconds: selectedMinutes * 60,
+                    timeModel: timerModel,
                     onReturn: {
                         appState = nil
                     },
                     onFinish: {
+                        appState = .finishingTask
+                    },
+                    onCancel: {
                         appState = .finishingTask
                     },
                     pauseCount: $pauseCount

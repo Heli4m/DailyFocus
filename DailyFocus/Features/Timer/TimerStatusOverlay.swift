@@ -11,6 +11,7 @@ struct TimerStatusOverlay: View {
     var timeModel: TimerViewModel
     let containerSize: CGSize
     let onReturn: () -> Void
+    let onCancel: () -> Void
     var body: some View {
         if timeModel.timerState == .paused {
             PauseTimer (
@@ -18,7 +19,9 @@ struct TimerStatusOverlay: View {
                     timeModel.resume()
                     Haptics.trigger(.light)
                 },
-                onReturn: onReturn)
+                onReturn: onReturn,
+                onCancel: onCancel,
+            )
             .transition(
                 .asymmetric(
                     insertion: .move(edge: .bottom).combined(with: .opacity),

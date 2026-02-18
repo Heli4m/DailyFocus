@@ -12,7 +12,7 @@ import UserNotifications
 @Observable
 class TimerViewModel {
     var secondsRemaining: Int
-    let totalSeconds: Int
+    var totalSeconds: Int
     var isProcessingATap: Bool = false
     var timerState: TimerStates = .running
     let notifications = Notifications.shared

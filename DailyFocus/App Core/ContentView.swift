@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var TaskList: [TaskData] = []
     @State private var hasAppeared: Bool = false
     @State private var selectedTab: TabEnum = .home
+    @State private var timeModel = TimerViewModel(initialSeconds: 0)
     
     @State private var pauseCount: Int = 0
     
@@ -44,7 +45,8 @@ struct ContentView: View {
                     TimerMainContainer(
                         appState: $activeState,
                         selectedMinutes: $selectedMinutes,
-                        pauseCount: $pauseCount
+                        pauseCount: $pauseCount,
+                        timerModel: $timeModel
                     )
                     .tag(TabEnum.timer)
                 }
@@ -61,16 +63,18 @@ struct ContentView: View {
                 if activeState == .finishingTask {
                     if let selectedTask = selectedTask {
                         let totalTime = Double(selectedTask.time)
-                        let completedTime = Double(selectedMinutes)
+                        let minutesRemaining = Double(timeModel.secondsRemaining) / Double(60)
+                        let completedTime = Double(selectedMinutes) - minutesRemaining
                         let percentage = Int(totalTime == 0 ? 0 : (completedTime / totalTime) * 100)
 
                         TaskComplete (
-                            selectedMinutes: selectedMinutes,
+                            completedMinutes: Int(completedTime),
                             pauseCount: pauseCount,
                             completionPercentage: percentage,
                             onContinue: {
                                 activeState = nil
                                 pauseCount = 0
+                                timeModel = TimerViewModel(initialSeconds: 0)
                                 
                                 withAnimation {
                                     selectedTab = .home
@@ -129,6 +133,11 @@ struct ContentView: View {
                             activeState = .editingTask
                         },
                         onStart: {
+                            let totalSeconds = selectedMinutes * 60
+                                timeModel.secondsRemaining = totalSeconds
+                                timeModel.totalSeconds = totalSeconds
+                                timeModel.timerState = .running
+                            
                             withAnimation {
                                 selectedTab = .timer
                             }
@@ -156,6 +165,12 @@ struct ContentView: View {
                         task: task,
                         
                         onStart: { minutes in
+                            let totalSeconds = selectedMinutes * 60
+                            selectedMinutes = minutes
+                                timeModel.secondsRemaining = totalSeconds
+                                timeModel.totalSeconds = totalSeconds
+                                timeModel.timerState = .running
+                            
                             withAnimation {
                                 selectedTab = .timer
                             }

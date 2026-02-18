@@ -10,24 +10,13 @@ import Combine
 import UserNotifications
 
 struct CountDownTimer: View {
-    @State private var timeModel: TimerViewModel
+    @Bindable var timeModel: TimerViewModel
     @Environment(\.scenePhase) var scenePhase
     @State private var lastActiveDate: Date? = nil
     let onReturn: () -> Void
     let onFinish: () -> Void
+    let onCancel: () -> Void
     @Binding var pauseCount: Int
-    
-    init(
-        seconds: Int,
-        onReturn: @escaping () -> Void,
-        onFinish: @escaping () -> Void,
-        pauseCount: Binding<Int>
-    ) {
-        self.onReturn = onReturn
-        _timeModel = State(wrappedValue: TimerViewModel(initialSeconds: seconds))
-        self.onFinish = onFinish
-        self._pauseCount = pauseCount
-    }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -71,7 +60,8 @@ struct CountDownTimer: View {
                 TimerStatusOverlay(
                     timeModel: timeModel,
                     containerSize: geometry.size,
-                    onReturn: onReturn
+                    onReturn: onReturn,
+                    onCancel: onCancel
                 )
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -84,7 +74,7 @@ struct CountDownTimer: View {
                 
                 if timeModel.timerState == .finished {
                         withAnimation(.spring()) {
-                            onFinish() 
+                            onFinish()
                         }
                     }
             }
