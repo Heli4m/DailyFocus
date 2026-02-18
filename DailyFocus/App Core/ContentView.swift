@@ -62,20 +62,18 @@ struct ContentView: View {
             
                 if activeState == .finishingTask {
                     if let selectedTask = selectedTask {
-                        let totalTime = Double(selectedTask.time)
-                        let minutesRemaining = Double(timeModel.secondsRemaining) / Double(60)
-                        let completedTime = Double(selectedMinutes) - minutesRemaining
-                        let percentage = Int(totalTime == 0 ? 0 : (completedTime / totalTime) * 100)
+                        let percentage = timeModel.calculateCompletionPercentage(sessionTotal: selectedMinutes, goalTotal: selectedTask.time)
+                        let completedTime = timeModel.calculateCompletedTime(sessionTotal: selectedMinutes)
 
                         TaskComplete (
-                            completedMinutes: Int(completedTime),
+                            completedMinutes: completedTime,
                             pauseCount: pauseCount,
                             completionPercentage: percentage,
                             onContinue: {
                                 activeState = nil
                                 pauseCount = 0
                                 timeModel = TimerViewModel(initialSeconds: 0)
-                                
+                                 
                                 withAnimation {
                                     selectedTab = .home
                                 }
@@ -86,106 +84,15 @@ struct ContentView: View {
                     }
                 }
             }
-            .sheet(isPresented: Binding(
-                get: { activeState == .editingTask },
-                set: { if !$0 {
-                    selectedTask = nil
-                    activeState = nil
-                } }
-            )) {
-                TaskEditBar(
-                    onCreate: { createdTask in
-                        if selectedTask == nil {
-                            TaskList.append(createdTask)
-                        }
-                    },
-                    
-                    onEdit: { updatedTask in
-                        if let index = TaskList.firstIndex(where: { $0.id == updatedTask.id }) {
-                            TaskList[index] = updatedTask
-                        }
-                        selectedTask = nil 
-                        activeState = nil
-                    },
-                    existingTask: selectedTask
-                )
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-                .presentationBackground(Color(Config.bgColor))
-            }
-            
-            .sheet(isPresented: Binding(
-                get: { activeState == .openingTask },
-                set: { if !$0 { activeState = nil }}
-            )) {
-                if let task = selectedTask {
-                    TaskUseBar (
-                        data: selectedTask!,
-
-                        onSetTime: {
-                            activeState = nil
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                activeState = .settingFocusTime
-                            }
-                        },
-                        onEdit: {
-                            activeState = .editingTask
-                        },
-                        onStart: {
-                            let totalSeconds = selectedMinutes * 60
-                                timeModel.secondsRemaining = totalSeconds
-                                timeModel.totalSeconds = totalSeconds
-                                timeModel.timerState = .running
-                            
-                            withAnimation {
-                                selectedTab = .timer
-                            }
-                            selectedMinutes = task.time
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation {
-                                    activeState = .runningTask
-                                }
-                            }
-                        }
-                    )
-                    .presentationDetents([.fraction(0.25)])
-                    .presentationDragIndicator(.visible)
-                    .presentationBackground(Color(Config.bgColor))
-                }
-            }
-            
-            .sheet(isPresented: Binding(
-                get: { activeState == .settingFocusTime },
-                set: { if !$0 { activeState = nil }}
-            )) {
-                if let task = selectedTask {
-                    TaskSetTimeBar (
-                        selectedMinutes: $selectedMinutes,
-                        task: task,
-                        
-                        onStart: { minutes in
-                            let totalSeconds = selectedMinutes * 60
-                            selectedMinutes = minutes
-                                timeModel.secondsRemaining = totalSeconds
-                                timeModel.totalSeconds = totalSeconds
-                                timeModel.timerState = .running
-                            
-                            withAnimation {
-                                selectedTab = .timer
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation {
-                                    activeState = .runningTask
-                                }
-                            }
-                        }
-                    )
-                    .presentationDetents([.medium])
-                    .presentationDragIndicator(.visible)
-                    .presentationBackground(Color(Config.bgColor))
-                }
-            }
+            .AppTaskSheets(
+                activeState: $activeState,
+                selectedTask: $selectedTask,
+                selectedMinutes: $selectedMinutes,
+                TaskList: $TaskList,
+                timeModel: timeModel,
+                selectedTab: $selectedTab
+            )
+           
         }
         .onChange(of: TaskList) { oldtasks, newtasks in
             saveData(data: newtasks)
@@ -196,7 +103,7 @@ struct ContentView: View {
         }
     }
     
-    func deleteTask( _ task: TaskData) {
+    private func deleteTask( _ task: TaskData) {
         if let index = TaskList.firstIndex(where: { $0.id == task.id }) {
             TaskList.remove(at: index)
         }

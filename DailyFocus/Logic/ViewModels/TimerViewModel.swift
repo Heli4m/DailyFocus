@@ -49,4 +49,22 @@ class TimerViewModel {
         timerState = .running
         notifications.scheduleNotification(secondsRemaining: secondsRemaining)
     }
+    
+    func calculateCompletionPercentage(sessionTotal: Int, goalTotal: Int) -> Int {
+        guard goalTotal > 0 else { return 0 }
+        
+        let minutesRemaining = Double(secondsRemaining) / Double(60)
+        let completedTime = Double(sessionTotal) - minutesRemaining
+        let rawPercentage = completedTime / Double(goalTotal)
+        let percentage = Int(rawPercentage * 100)
+        
+        return max(0, min(percentage, 100))
+    }
+    
+    func calculateCompletedTime(sessionTotal: Int) -> Int {
+        let minutesRemaining = Double(secondsRemaining) / Double(60)
+        let completedTime = Double(sessionTotal) - minutesRemaining
+        
+        return Int(completedTime)
+    }
 }
