@@ -65,8 +65,8 @@ struct EmptyTaskList: View {
     var body: some View {
         VStack { // no tasks view
             Image(systemName: "sparkles")
-                .font(.system(size: 80))
-                .foregroundStyle(Config.accentColor)
+                .font(.system(size: Config.Layout.iconButtonSize))
+                .foregroundStyle(Config.Colors.accent)
                 .padding(.bottom)
                 .scaleEffect(sparklePulse ? 1.1 : 1)
                 .opacity(sparklePulse ? 1 : 0.7)
@@ -80,7 +80,7 @@ struct EmptyTaskList: View {
                 
             
             LexendMediumText(text: "Tap the '+' to add your first focus task!", size: 28)
-                .foregroundStyle(Config.primaryText)
+                .foregroundStyle(Config.Colors.primaryText)
                 .monospacedDigit()
                 .multilineTextAlignment(.center)
                 .padding(.top)

@@ -44,7 +44,7 @@ extension View {
                 )
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
-                .presentationBackground(Color(Config.bgColor))
+                .presentationBackground(Color(Config.Colors.background))
             }
             
             // USE BAR SHEET
@@ -77,7 +77,7 @@ extension View {
                     )
                     .presentationDetents([.fraction(0.25)])
                     .presentationDragIndicator(.visible)
-                    .presentationBackground(Color(Config.bgColor))
+                    .presentationBackground(Color(Config.Colors.background))
                 }
             }
             
@@ -103,7 +103,7 @@ extension View {
                     )
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
-                    .presentationBackground(Color(Config.bgColor))
+                    .presentationBackground(Color(Config.Colors.background))
                 }
             }
     }

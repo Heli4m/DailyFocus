@@ -152,9 +152,9 @@ struct PriorityDotMainView: View {
     
     var body: some View {
         ZStack (alignment: .leading) {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: Config.Layout.mainBigCornerRadius)
                 .frame(height: 80)
-                .foregroundStyle(Color(Config.itemColor))
+                .foregroundStyle(Color(Config.Colors.item))
             HStack (alignment: .center, spacing: 0) {
                 ForEach(1...3, id: \.self) { index in
                     Button {
@@ -174,8 +174,8 @@ struct PriorityDotMainView: View {
                     .buttonStyle(.plain)
                     .background {
                         if selectedButton == index {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Config.secondaryText)
+                            RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
+                                .fill(Config.Colors.secondaryText)
                                 .frame(width: 115, height: 40)
                                 .padding()
                                 .matchedGeometryEffect(id: "slider", in: animation)
@@ -183,7 +183,7 @@ struct PriorityDotMainView: View {
                     }
                 }
             }
-            .padding(.horizontal, 10)
+            .padding(.horizontal, Config.Layout.standardPaddingMedium)
         }
     }
 }
@@ -209,7 +209,7 @@ struct PriorityDot: View {
     @Binding var selectedButton: Int
     
     var dotColor: Color {
-        id == selectedButton ? Config.accentColor : Config.secondaryText
+        id == selectedButton ? Config.Colors.accent : Config.Colors.secondaryText
     }
     
     var body: some View {

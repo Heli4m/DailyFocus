@@ -55,7 +55,7 @@ struct TaskSetTimeBar: View {
                 .foregroundStyle(Config.Colors.primaryText)
                 .padding()
             
-            HStack (spacing: 5) {
+            HStack (spacing: Config.Layout.standardPaddingSmall) {
                 ZStack {
                     RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
                         .fill(Config.Colors.item)
@@ -71,7 +71,7 @@ struct TaskSetTimeBar: View {
                             } label: {
                                 ZStack {
                                     Color.clear
-                                    LexendMediumText(text: "\(time)", size: Config.Layout.pickerTextSize)
+                                    LexendMediumText(text: "\(time)", size: Config.Layout.standardMediumTextSize)
                                         .foregroundStyle(Config.Colors.primaryText)
                                 }
                                 .frame(width: Config.Layout.timePickerIndividualWidth, height: Config.Layout.timePickerIndividualHeight)
@@ -107,7 +107,7 @@ struct TaskSetTimeBar: View {
                     } label: {
                         ZStack {
                             Color.clear
-                            LexendMediumText(text: "\(task.time)", size: Config.Layout.pickerTextSize)
+                            LexendMediumText(text: "\(task.time)", size: Config.Layout.standardMediumTextSize)
                                 .foregroundStyle(Config.Defaults.timeSelections.contains(task.time) ? Config.Colors.accent : Config.Colors.primaryText)
                         }
                         .frame(maxWidth: .infinity)

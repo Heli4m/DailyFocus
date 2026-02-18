@@ -44,11 +44,12 @@ struct Config {
         
         static let priorityDotSize: CGFloat = 10
         
+        static let mainSmallCornerRadius: CGFloat = 10
         static let mainCornerRadius: CGFloat = 15
         static let mainBigCornerRadius: CGFloat = 20
         
         static let standardSmallTextSize: CGFloat = 18
-        static let pickerTextSize: CGFloat = 20
+        static let standardMediumTextSize: CGFloat = 20
         static let standardTitleTextSize: CGFloat = 24
         
         static let standardPaddingSmall: CGFloat = 5

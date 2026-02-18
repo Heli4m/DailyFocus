@@ -28,7 +28,7 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Color(Config.bgColor)
+                Color(Config.Colors.background)
                     .ignoresSafeArea()
                 
                 TabView (selection: $selectedTab) {

@@ -24,7 +24,7 @@ struct CountDownTimer: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Color(Config.bgColor)
+                Color(Config.Colors.background)
                     .ignoresSafeArea()
                     .onTapGesture(count: 2) {
                         guard !timeModel.isProcessingATap else { return }
@@ -48,7 +48,7 @@ struct CountDownTimer: View {
                     }
                 
                 LexendMediumText(text: timeModel.timeString, size: 80)
-                    .foregroundStyle(Config.primaryText)
+                    .foregroundStyle(Config.Colors.primaryText)
                     .monospacedDigit()
                     .contentTransition(.numericText(value: Double(timeModel.secondsRemaining)))
                     .animation(.snappy, value: timeModel.secondsRemaining)
@@ -134,7 +134,7 @@ struct PauseTimer: View {
                         }
                     }
                     .frame(width: 70, height: 70)
-                    .foregroundStyle(Config.bgColor)
+                    .foregroundStyle(Config.Colors.background)
                     .scaleEffect(scale)
                     
                 }
@@ -157,7 +157,7 @@ struct PauseTimer: View {
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.system(size: 50))
-                                .foregroundStyle(Config.secondaryText)
+                                .foregroundStyle(Config.Colors.secondaryText)
                                 .padding(.vertical, 40)
                                 .padding(.horizontal, 35)
                         }
@@ -202,12 +202,12 @@ struct TimerCircleView: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Config.primaryText.opacity(0.1), lineWidth: 20)
+                .stroke(Config.Colors.primaryText.opacity(0.1), lineWidth: 20)
             
             Circle()
                 .trim(from: 0, to: CGFloat(secondsRemaining) / CGFloat(totalSeconds))
                 .stroke(
-                    Color(Config.accentColor),
+                    Color(Config.Colors.accent),
                     style: StrokeStyle(lineWidth: 10)
                 )
                 .rotationEffect(.degrees(-90))
@@ -220,18 +220,18 @@ struct TimerCircleView: View {
 struct TimerNotSelectedView: View {
     var body: some View {
         ZStack (alignment: .center) {
-            Color(Config.bgColor)
+            Color(Config.Colors.background)
                 .ignoresSafeArea()
             
             VStack {
                 Image(systemName: "timer.circle.fill")
-                    .foregroundStyle(Config.primaryText)
+                    .foregroundStyle(Config.Colors.primaryText)
                     .font(.system(size: 100))
                     .padding(.bottom)
                 
                 LexendMediumText(text: "You haven't started a task yet!", size: 30)
                     .monospacedDigit()
-                    .foregroundStyle(Config.primaryText)
+                    .foregroundStyle(Config.Colors.primaryText)
                     .multilineTextAlignment(.center)
             }
         }

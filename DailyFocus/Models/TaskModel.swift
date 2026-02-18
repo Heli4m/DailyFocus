@@ -17,11 +17,11 @@ struct TaskData: Identifiable, Codable, Equatable {
     var priorityColor: Color {
         switch self.priority {
         case 3:
-            return Config.highPriority
+            return Config.Colors.highPriority
         case 2:
-            return Config.mediumPriority
+            return Config.Colors.mediumPriority
         default:
-            return Config.accentColor
+            return Config.Colors.accent
         }
     }
     

@@ -18,9 +18,9 @@ struct Task: View {
     
     var priorityColor: Color {
         switch data.priority {
-        case 3: return Config.highPriority
-        case 2: return Config.mediumPriority
-        default: return Config.accentColor
+        case 3: return Config.Colors.highPriority
+        case 2: return Config.Colors.mediumPriority
+        default: return Config.Colors.accent
         }
     }
     
@@ -44,22 +44,22 @@ struct Task: View {
                 Haptics.trigger(.light)
                 print("\(data.name)")
             } label: {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: Config.Layout.mainBigCornerRadius)
                     .frame(width: width)
                     .frame(maxHeight: .infinity)
                     .shadow(
                         color: priorityColor.opacity(isPressed ? 0.3 : 0.1),
                         radius: isPressed ? 10 : 5, x: 0, y: 5
                     )
-                    .foregroundStyle(Color(Config.itemColor))
+                    .foregroundStyle(Color(Config.Colors.item))
                     .overlay (
                         HStack {
                             VStack (alignment: .leading) {
-                                LexendMediumText(text: data.name, size: 20)
-                                    .foregroundStyle(Config.primaryText)
+                                LexendMediumText(text: data.name, size: Config.Layout.standardMediumTextSize)
+                                    .foregroundStyle(Config.Colors.primaryText)
                                 
                                 LexendMediumText(text: formattedTime, size: 15)
-                                    .foregroundStyle(Config.secondaryText)
+                                    .foregroundStyle(Config.Colors.secondaryText)
                             }
                             .padding(.leading, 30)
                             
@@ -80,7 +80,7 @@ struct Task: View {
                     .overlay (alignment: .topLeading) {
                         Circle()
                             .frame(width: 8, height: 8)
-                            .foregroundStyle(isRunning ? Config.inactiveAccentColor : Config.itemColor)
+                            .foregroundStyle(isRunning ? Config.Colors.inactiveAccent : Config.Colors.item)
                             .padding()
                     }
             }

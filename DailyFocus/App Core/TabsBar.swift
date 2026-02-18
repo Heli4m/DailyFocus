@@ -16,9 +16,9 @@ struct TabsBar: View {
             Spacer()
             
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: Config.Layout.mainBigCornerRadius)
                     .frame(width: geometry.size.width, height: 60)
-                    .foregroundStyle(Config.itemColor)
+                    .foregroundStyle(Config.Colors.item)
                 
                 HStack (spacing: 0){
                     IndividualTabButton(
@@ -57,8 +57,8 @@ struct IndividualTabButton: View {
     var body: some View {
         ZStack {
             Image(systemName: currentTab == tab ? selectedImageName : systemImageName)
-                .font(.system(size: 20))
-                .foregroundStyle(Config.secondaryText)
+                .font(.system(size: Config.Layout.standardMediumTextSize))
+                .foregroundStyle(Config.Colors.secondaryText)
             
             Button {
                 withAnimation (.easeInOut) {
@@ -67,7 +67,7 @@ struct IndividualTabButton: View {
             } label: {
                 Rectangle()
                     .frame(width: 60, height: 60)
-                    .foregroundStyle(Config.secondaryText.opacity(0.01))
+                    .foregroundStyle(Config.Colors.secondaryText.opacity(0.01))
             }
         }
         .frame(maxWidth: .infinity)

@@ -19,12 +19,12 @@ struct TaskComplete: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Config.bgColor
+                Config.Colors.background
                     .ignoresSafeArea()
                 
                 VStack {
                     LexendMediumText(text: "Task Completed!", size: 35)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                         .padding(.bottom)
                         .padding(.top, 70)
                     
@@ -55,12 +55,12 @@ struct TaskComplete: View {
                         
                         Haptics.success()
                     } label: {
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundStyle(Config.accentColor)
+                        RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
+                            .foregroundStyle(Config.Colors.accent)
                             .frame(width: max(0, geometry.size.width - 30), height: 40)
                             .overlay {
-                                LexendMediumText(text: "Continue", size: 18)
-                                    .foregroundStyle(Color(Config.primaryText))
+                                LexendMediumText(text: "Continue", size: Config.Layout.standardSmallTextSize)
+                                    .foregroundStyle(Color(Config.Colors.primaryText))
                             }
                     }
                 }
@@ -117,20 +117,20 @@ struct StatsShape: View {
     let imageName: String
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .foregroundColor(Config.itemColor.opacity(0.7))
+        RoundedRectangle(cornerRadius: Config.Layout.mainSmallCornerRadius)
+            .foregroundColor(Config.Colors.item.opacity(0.7))
             .frame(maxWidth: .infinity)
             .frame(height: 150)
             .overlay (alignment: .leading) {
                 VStack (alignment: .leading, spacing: 0) {
                     LexendMediumText(text: title, size: 15)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                     
                     LexendMediumText(text: number, size: 70)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                     
                     LexendMediumText(text: type, size: 15)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                 }
                 .padding(.leading, 30)
             }
@@ -139,9 +139,9 @@ struct StatsShape: View {
                     .font(.system(size: 190))
                     .offset(x: 50, y: 30)
                     .rotationEffect(Angle(degrees: 20))
-                    .foregroundStyle(Config.secondaryText)
+                    .foregroundStyle(Config.Colors.secondaryText)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: Config.Layout.mainSmallCornerRadius))
     }
 }
 
@@ -152,27 +152,27 @@ struct customStatsShape: View {
     let imageName: String
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .foregroundColor(Config.itemColor.opacity(0.7))
+        RoundedRectangle(cornerRadius: Config.Layout.mainSmallCornerRadius)
+            .foregroundColor(Config.Colors.item.opacity(0.7))
             .frame(maxWidth: .infinity)
             .frame(height: 150)
             .overlay (alignment: .leading) {
                 VStack (alignment: .leading, spacing: 0) {
                     LexendMediumText(text: title, size: 15)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                     
                     if number == 100 {
                         Image(systemName: "checkmark")
                             .font(.system(size: 70, weight: .bold))
                             .padding(.top)
-                            .foregroundStyle(Config.accentColor)
+                            .foregroundStyle(Config.Colors.accent)
                     } else {
                         LexendMediumText(text: "\(number)%", size: 70)
-                            .foregroundStyle(Config.primaryText)
+                            .foregroundStyle(Config.Colors.primaryText)
                     }
                     
                     LexendMediumText(text: type, size: 15)
-                        .foregroundStyle(Config.primaryText)
+                        .foregroundStyle(Config.Colors.primaryText)
                 }
                 .padding(.leading, 30)
             }
@@ -181,9 +181,9 @@ struct customStatsShape: View {
                     .font(.system(size: 190))
                     .offset(x: 50, y: 30)
                     .rotationEffect(Angle(degrees: 20))
-                    .foregroundStyle(Config.secondaryText)
+                    .foregroundStyle(Config.Colors.secondaryText)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: Config.Layout.mainSmallCornerRadius))
     }
 }
 
