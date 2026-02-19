@@ -81,29 +81,32 @@ struct CountDownTimer: View {
             }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
-            if timeModel.timerState == .running {
-                if newPhase == .background {
-                    lastActiveDate = Date()
-                } else if newPhase == .active {
-                    if let lastDate = lastActiveDate, timeModel.timerState == .running {
-                        let timePassed = Int(Date().timeIntervalSince(lastDate))
-                        
+            updateTimer(newPhase: newPhase, oldPhase: oldPhase)
+        }
+    }
+    
+    func updateTimer(newPhase: ScenePhase, oldPhase: ScenePhase) {
+        if timeModel.timerState == .running {
+            if newPhase == .background {
+                lastActiveDate = Date()
+            } else if newPhase == .active {
+                if let lastDate = lastActiveDate, timeModel.timerState == .running {
+                    let timePassed = Int(Date().timeIntervalSince(lastDate))
+                    
+                    withAnimation() {
+                        timeModel.secondsRemaining -= timePassed
+                    }
+                    
+                    if timeModel.secondsRemaining < 0 {
+                        timeModel.secondsRemaining = 0
+                        timeModel.timerState = .finished
                         withAnimation() {
-                            timeModel.secondsRemaining -= timePassed
+                            onFinish()
                         }
-                        
-                        if timeModel.secondsRemaining < 0 {
-                            timeModel.secondsRemaining = 0
-                            timeModel.timerState = .finished
-                            withAnimation() {
-                                onFinish()
-                            }
-                                
-                        }
+                            
                     }
                 }
             }
-            
         }
     }
 }
@@ -158,7 +161,7 @@ struct PauseTimer: View {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.system(size: 50))
                                 .foregroundStyle(Config.Colors.secondaryText)
-                                .padding(.vertical, 40)
+                                .padding(.vertical, 50)
                                 .padding(.horizontal, 35)
                         }
                         .zIndex(10)

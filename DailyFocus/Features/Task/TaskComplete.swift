@@ -29,21 +29,7 @@ struct TaskComplete: View {
                         .padding(.top, 70)
                     
                     VStack {
-                        if transitionPhases >= 1 {
-                            StatsShape(title: "Time Focused:", number: String(completedMinutes), type: "minutes", imageName: "stopwatch.fill")
-                                .transition(.move(edge: .trailing).combined(with: .opacity))
-                        }
-                        if transitionPhases >= 2 {
-                            StatsShape(title: "Pause Count:", number: String(pauseCount), type: "times", imageName: "pause.circle.fill")
-                                .transition(.move(edge: .trailing).combined(with: .opacity))
-                        }
-                        if transitionPhases >= 3 {
-                            customStatsShape(title: "Task Completion:", number: animatedPercentage, type: "", imageName: "chart.line.uptrend.xyaxis.circle.fill")
-                                .transition(.move(edge: .trailing).combined(with: .opacity))
-                                .onAppear() {
-                                    countUp()
-                                }
-                        }
+                        sequentialDisplayView(transitionPhases: transitionPhases, completedMinutes: completedMinutes, pauseCount: pauseCount, animatedPercentage: animatedPercentage, countUp: countUp)
                     }
                     .padding(.horizontal)
                     .padding(.top)
@@ -73,19 +59,7 @@ struct TaskComplete: View {
             }
         }
         .onAppear {
-            for i in 1...3 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 1.0) {
-                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                        transitionPhases = i
-                    }
-                    
-                    if i == 3 && completionPercentage == 100 {
-                        Haptics.success()
-                    } else {
-                        Haptics.trigger(.medium)
-                    }
-                }
-            }
+            sequentialDisplay()
         }
     }
     
@@ -106,6 +80,48 @@ struct TaskComplete: View {
                     Haptics.trigger(.light)
                 }
             }
+        }
+    }
+    
+    func sequentialDisplay() {
+        for i in 1...3 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 1.0) {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                    transitionPhases = i
+                }
+                
+                if i == 3 && completionPercentage == 100 {
+                    Haptics.success()
+                } else {
+                    Haptics.trigger(.medium)
+                }
+            }
+        }
+    }
+}
+
+struct sequentialDisplayView: View {
+    let transitionPhases: Int
+    let completedMinutes: Int
+    let pauseCount: Int
+    let animatedPercentage: Int
+    let countUp: () -> Void
+    
+    var body: some View {
+        if transitionPhases >= 1 {
+            StatsShape(title: "Time Focused:", number: String(completedMinutes), type: "minutes", imageName: "stopwatch.fill")
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+        }
+        if transitionPhases >= 2 {
+            StatsShape(title: "Pause Count:", number: String(pauseCount), type: "times", imageName: "pause.circle.fill")
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+        }
+        if transitionPhases >= 3 {
+            customStatsShape(title: "Task Completion:", number: animatedPercentage, type: "", imageName: "chart.line.uptrend.xyaxis.circle.fill")
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+                .onAppear() {
+                    countUp()
+                }
         }
     }
 }
