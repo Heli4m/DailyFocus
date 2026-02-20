@@ -32,7 +32,13 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 TabView (selection: $selectedTab) {
-                    HomeView(
+                    HomeView()
+                        .tag(TabEnum.home)
+                    
+                    ChecklistTask()
+                        .tag(TabEnum.checklist)
+                    
+                    TaskHomeView(
                         geometry: geometry,
                         hasAppeared: $hasAppeared,
                         selectedTask: $selectedTask,
@@ -40,7 +46,7 @@ struct ContentView: View {
                         deleteTask: deleteTask,
                         TaskList: TaskList
                     )
-                    .tag(TabEnum.home)
+                    .tag(TabEnum.timedtasks)
                     
                     TimerMainContainer(
                         appState: $activeState,
@@ -49,6 +55,10 @@ struct ContentView: View {
                         timerModel: $timeModel
                     )
                     .tag(TabEnum.timer)
+                    
+                    SettingsView()
+                        .tag(TabEnum.settings)
+
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .ignoresSafeArea()

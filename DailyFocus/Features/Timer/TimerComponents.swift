@@ -232,7 +232,7 @@ struct TimerNotSelectedView: View {
                     .font(.system(size: 100))
                     .padding(.bottom)
                 
-                LexendMediumText(text: "You haven't started a task yet!", size: 30)
+                LexendMediumText(text: "You haven't started a task yet!", size: 28)
                     .monospacedDigit()
                     .foregroundStyle(Config.Colors.primaryText)
                     .multilineTextAlignment(.center)

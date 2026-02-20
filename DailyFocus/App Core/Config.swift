@@ -96,6 +96,9 @@ enum TimerStates {
 
 enum TabEnum {
     case home
+    case timedtasks
     case timer
+    case checklist
+    case settings
 }
 

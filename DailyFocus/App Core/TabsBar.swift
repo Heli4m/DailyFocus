@@ -22,23 +22,37 @@ struct TabsBar: View {
                 
                 HStack (spacing: 0){
                     IndividualTabButton(
-                        tab: .timer,
-                        systemImageName: "timer.circle",
-                        selectedImageName: "timer.circle.fill",
-                        currentTab: $currentTab
-                    )
-                    
-                    IndividualTabButton(
                         tab: .home,
-                        systemImageName: "house",
-                        selectedImageName: "house.fill",
+                        systemImageName: "house.circle",
+                        selectedImageName: "house.circle.fill",
+                        currentTab: $currentTab
+                    )
+                    
+                    IndividualTabButton(
+                        tab: .checklist,
+                        systemImageName: "checkmark.square",
+                        selectedImageName: "checkmark.square.fill",
+                        currentTab: $currentTab
+                    )
+                    
+                    IndividualTabButton(
+                        tab: .timedtasks,
+                        systemImageName: "fitness.timer",
+                        selectedImageName: "fitness.timer.fill",
                         currentTab: $currentTab
                     )
                     
                     IndividualTabButton(
                         tab: .timer,
-                        systemImageName: "timer.circle",
-                        selectedImageName: "timer.circle.fill",
+                        systemImageName: "hourglass.circle",
+                        selectedImageName: "hourglass.circle.fill",
+                        currentTab: $currentTab
+                    )
+                    
+                    IndividualTabButton(
+                        tab: .settings,
+                        systemImageName: "gearshape",
+                        selectedImageName: "gearshape.fill",
                         currentTab: $currentTab
                     )
                 }

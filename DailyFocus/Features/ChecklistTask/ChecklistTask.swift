@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  ChecklistTask.swift
 //  DailyFocus
 //
 //  Created by Liam Ngo on 20/2/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct ChecklistTask: View {
     var body: some View {
         ZStack {
             Config.Colors.background
@@ -17,5 +17,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    ChecklistTask()
 }
