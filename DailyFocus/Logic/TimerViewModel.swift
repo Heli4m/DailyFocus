@@ -1,9 +1,5 @@
-//
-//  TimerViewModel.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 30/1/26.
-//
+// Created by Liam Ngo on 30/1/26.
+// Purpose: A class that controls the logic of the timer.
 
 import Foundation
 import SwiftUI

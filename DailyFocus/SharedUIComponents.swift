@@ -1,9 +1,5 @@
-//
-//  SharedUIComponents.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/2/26.
-//
+// Created by Liam Ngo on 18/2/26.
+// Purpose: A library of reusable custom UI components.
 
 import Foundation
 import SwiftUI

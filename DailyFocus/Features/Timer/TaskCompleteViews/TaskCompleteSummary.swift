@@ -1,9 +1,5 @@
-//
-//  TaskComplete.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 14/2/26.
-//
+// Created by Liam Ngo on 14/2/26.
+// Purpose: Displays a detailed statisical summary of each focus task after it is finished.
 
 import SwiftUI
 

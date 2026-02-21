@@ -1,9 +1,5 @@
-//
-//  Task.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 21/1/26.
-//
+// Created by Liam Ngo on 21/1/26.
+// Purpose: Represents the "card" for every task that opens interaction.
 
 import SwiftUI
 

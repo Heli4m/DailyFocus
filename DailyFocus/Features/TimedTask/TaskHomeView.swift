@@ -1,9 +1,5 @@
-//
-//  HomeView.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 30/1/26.
-//
+// Created by Liam Ngo on 30/1/26.
+// Purpose: Main landing page for the timed tasks section of the app, also holds all the task components together.
 
 import SwiftUI
 

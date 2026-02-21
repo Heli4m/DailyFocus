@@ -1,9 +1,5 @@
-//
-//  ContentView.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/1/26.
-//
+// Created by Liam Ngo on 18/1/26.
+// Purpose: The backbone of the app, puts all the views and computing together.
 
 import SwiftUI
 
@@ -19,6 +15,7 @@ struct ContentView: View {
     
     @State private var selectedMinutes: Int = 25
     @State private var selectedTask: TaskData? = nil
+    @State private var currentTimerTask: TaskData? = nil
     
     @State private var sparklePulse: Bool = false
     

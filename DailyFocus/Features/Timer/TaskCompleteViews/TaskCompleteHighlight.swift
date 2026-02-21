@@ -1,9 +1,5 @@
-//
-//  TaskCompleteHighlight.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 20/2/26.
-//
+// Created by Liam Ngo on 20/2/26.
+// Purpose: A celebratory view that provides "Trophies" at the end of each task based on performance.
 
 import SwiftUI
 
@@ -135,6 +131,13 @@ struct Trophy: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 1.0) {
                 withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                     transitionPhases = i
+                }
+                
+                switch i {
+                case 1: Haptics.trigger(.medium)
+                case 2: Haptics.success()
+                case 3: Haptics.trigger(.light)
+                default: break
                 }
             }
         }

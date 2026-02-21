@@ -1,9 +1,5 @@
-//
-//  Utilities.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/2/26.
-//
+// Created by Liam Ngo on 18/2/26.
+// Purpose: Provides essential shared services such as notifications and haptic feedback.
 
 import Foundation
 import SwiftUI

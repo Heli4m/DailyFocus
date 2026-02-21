@@ -1,9 +1,5 @@
-//
-//  TabsBar.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 16/2/26.
-//
+// Created by Liam Ngo on 16/2/26.
+// Purpose: Implements the custom navigation bar for the app, allowing for custom icons and a navigator that matches the UI better.
 
 import SwiftUI
 

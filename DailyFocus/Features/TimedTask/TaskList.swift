@@ -1,9 +1,5 @@
-//
-//  TaskList.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 30/1/26.
-//
+// Created by Liam Ngo on 30/1/26.
+// Purpose: Manages all tasks created and keeps them in a list, sorted based on priority.
 
 import SwiftUI
 

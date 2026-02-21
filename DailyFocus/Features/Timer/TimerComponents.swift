@@ -1,9 +1,5 @@
-//
-//  TimerComponents.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/2/26.
-//
+// Created by Liam Ngo on 18/2/26.
+// Purpose: A selection of UI components designed for the timer interface.
 
 import Foundation
 import SwiftUI

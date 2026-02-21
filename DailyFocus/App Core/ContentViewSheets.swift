@@ -1,9 +1,5 @@
-//
-//  ContentViewSheets.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/2/26.
-//
+// Created by Liam Ngo on 18/2/26.
+// Purpose: An extension of ContentView that holds all the .sheet views in order to declutter the backbone.
 
 import Foundation
 import SwiftUI

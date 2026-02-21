@@ -1,8 +1,4 @@
-//
-//  ChecklistTask.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 20/2/26.
+// Created by Liam Ngo on 20/2/26.
 //
 
 import SwiftUI

@@ -1,9 +1,5 @@
-//
-//  TimerMainContainer.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 13/2/26.
-//
+// Created by Liam Ngo on 13/2/26.
+// Purpose: Primary container for timer.
 
 import SwiftUI
 

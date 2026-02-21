@@ -1,9 +1,5 @@
-//
-//  TaskViews.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/2/26.
-//
+// Created by Liam Ngo on 18/2/26.
+// Purpose: Contains reusable UI components used for task interaction.
 
 import Foundation
 import SwiftUI

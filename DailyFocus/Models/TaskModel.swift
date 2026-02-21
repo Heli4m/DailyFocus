@@ -1,9 +1,5 @@
-//
-//  TaskModel.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/2/26.
-//
+// Created by Liam Ngo on 18/2/26.
+// Purpose: Defines the TaskData structure that holds the information for every task.
 
 import Foundation
 import SwiftUI

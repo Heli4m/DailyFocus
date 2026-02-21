@@ -1,9 +1,5 @@
-//
-//  Config.swift
-//  DailyFocus
-//
-//  Created by Liam Ngo on 18/1/26.
-//
+// Created by Liam Ngo on 18/1/26.
+// Purpose: Acts as the center data repository for constants. This includes Colors, Layout Sizings, Time Constraints,... and even Enums used for navigation.
 
 import Foundation
 import SwiftUI
