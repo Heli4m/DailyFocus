@@ -101,7 +101,13 @@ struct ContentView: View {
                             completedTaskTime: selectedMinutes - timeModel.secondsRemaining,
                             taskPriority: selectedTask.priority,
                             pauseCount: pauseCount,
-                            geometry: geometry
+                            geometry: geometry,
+                            onContinue: {
+                                completionPage = nil
+                                withAnimation {
+                                    selectedTab = .timedtasks
+                                }
+                            }
                         )
                     }
                 }

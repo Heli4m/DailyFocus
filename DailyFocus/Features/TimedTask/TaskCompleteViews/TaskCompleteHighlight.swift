@@ -14,6 +14,8 @@ struct TaskCompleteHighlight: View {
     let pauseCount: Int
     let geometry: GeometryProxy
     
+    let onContinue: () -> Void
+    
     var body: some View {
         ZStack {
             Config.Colors.background
@@ -29,6 +31,7 @@ struct TaskCompleteHighlight: View {
                 Spacer()
                 
                 Button {
+                    onContinue()
                     Haptics.success()
                 } label: {
                     RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)
@@ -94,24 +97,45 @@ struct Trophy: View {
     let descriptionText: String
     let color: Color
     
+    @State private var transitionPhases: Int = 0
+    
     var body: some View {
         ZStack {
             VStack {
-                LexendMediumText(text: title, size: 50)
-                    .foregroundStyle(color)
-                    .padding(.bottom, Config.Layout.standardPaddingLarge)
-                    .shadow(color: color, radius: 10)
+                if transitionPhases >= 1 {
+                    LexendMediumText(text: title, size: 50)
+                        .foregroundStyle(color)
+                        .padding(.bottom, Config.Layout.standardPaddingLarge)
+                        .shadow(color: color, radius: 10)
+                }
                 
-                Image(systemName: iconSystemName)
-                    .font(.system(size: 250))
-                    .foregroundStyle(color)
-                    .shadow(color: color, radius: 10)
+                if transitionPhases >= 2 {
+                    Image(systemName: iconSystemName)
+                        .font(.system(size: 250))
+                        .foregroundStyle(color)
+                        .shadow(color: color, radius: 10)
+                }
                 
-                LexendMediumText(text: descriptionText, size: Config.Layout.standardMediumTextSize)
-                    .foregroundStyle(Config.Colors.primaryText)
-                    .padding(.top, Config.Layout.standardPaddingLarge)
-                    .monospacedDigit()
-                    .multilineTextAlignment(.center)
+                if transitionPhases == 3 {
+                    LexendMediumText(text: descriptionText, size: Config.Layout.standardMediumTextSize)
+                        .foregroundStyle(Config.Colors.primaryText)
+                        .padding(.top, Config.Layout.standardPaddingLarge)
+                        .monospacedDigit()
+                        .multilineTextAlignment(.center)
+                }
+            }
+        }
+        .onAppear {
+            sequentialDisplay()
+        }
+    }
+    
+    func sequentialDisplay() {
+        for i in 1...3 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 1.0) {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                    transitionPhases = i
+                }
             }
         }
     }
@@ -124,7 +148,10 @@ struct Trophy: View {
             completedTaskTime: 8,
             taskPriority: 1,
             pauseCount: 1,
-            geometry: geometry
+            geometry: geometry,
+            onContinue: {
+                print("continued")
+            }
         )
     }
 }
