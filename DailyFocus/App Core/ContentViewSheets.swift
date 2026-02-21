@@ -66,7 +66,8 @@ extension View {
                         onEdit: {
                             activeState.wrappedValue = .editingTask
                         },
-                        onStart: {
+                        onStart: { minutes in
+                            selectedMinutes.wrappedValue = minutes
                             startTimerLogic (
                                 minutes: selectedMinutes.wrappedValue,
                                 timeModel: timeModel,

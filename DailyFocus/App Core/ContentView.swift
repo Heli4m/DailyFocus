@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var hasAppeared: Bool = false
     @State private var selectedTab: TabEnum = .home
     @State private var timeModel = TimerViewModel(initialSeconds: 0)
+    @State private var completionPage: TaskCompletePages? = nil
     
     @State private var pauseCount: Int = 0
     
@@ -52,7 +53,8 @@ struct ContentView: View {
                         appState: $activeState,
                         selectedMinutes: $selectedMinutes,
                         pauseCount: $pauseCount,
-                        timerModel: $timeModel
+                        timerModel: $timeModel,
+                        completionPages: $completionPage
                     )
                     .tag(TabEnum.timer)
                     
@@ -69,12 +71,12 @@ struct ContentView: View {
                     TabsBar(currentTab: $selectedTab, geometry: geometry)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
-            
-                if activeState == .finishingTask {
+                
+                if completionPage == .summary {
                     if let selectedTask = selectedTask {
                         let percentage = timeModel.calculateCompletionPercentage(sessionTotal: selectedMinutes, goalTotal: selectedTask.time)
                         let completedTime = timeModel.calculateCompletedTime(sessionTotal: selectedMinutes)
-
+                        
                         TaskComplete (
                             completedMinutes: completedTime,
                             pauseCount: pauseCount,
@@ -83,14 +85,24 @@ struct ContentView: View {
                                 activeState = nil
                                 pauseCount = 0
                                 timeModel = TimerViewModel(initialSeconds: 0)
-                                 
-                                withAnimation {
-                                    selectedTab = .home
-                                }
+                                
+                                completionPage = .highlight
                             }
                         )
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                         .zIndex(10)
+                    }
+                }
+                
+                if completionPage == .highlight {
+                    if let selectedTask = selectedTask {
+                        TaskCompleteHighlight(
+                            totalTaskTime: selectedMinutes,
+                            completedTaskTime: selectedMinutes - timeModel.secondsRemaining,
+                            taskPriority: selectedTask.priority,
+                            pauseCount: pauseCount,
+                            geometry: geometry
+                        )
                     }
                 }
             }

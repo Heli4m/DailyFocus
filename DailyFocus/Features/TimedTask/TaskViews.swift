@@ -154,7 +154,7 @@ struct TaskUseBar: View {
     
     var onSetTime: () -> Void
     var onEdit: () -> Void
-    var onStart: () -> Void
+    var onStart: (Int) -> Void
     
     var body: some View {
         ZStack {
@@ -204,7 +204,7 @@ struct TaskUseBar: View {
                             } else {
                                 dismiss()
                                 DispatchQueue.main.asyncAfter(deadline: .now() + Config.Time.standardTransitionSpeed) {
-                                    onStart()
+                                    onStart(data.time)
                                 }
                                 Haptics.trigger(.medium)
                             }

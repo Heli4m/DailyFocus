@@ -102,3 +102,7 @@ enum TabEnum {
     case settings
 }
 
+enum TaskCompletePages {
+    case summary
+    case highlight
+}

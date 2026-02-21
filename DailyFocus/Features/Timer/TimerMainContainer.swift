@@ -12,6 +12,7 @@ struct TimerMainContainer: View {
     @Binding var selectedMinutes: Int
     @Binding var pauseCount: Int
     @Binding var timerModel: TimerViewModel
+    @Binding var completionPages: TaskCompletePages?
     
     var body: some View {
         ZStack {
@@ -23,9 +24,11 @@ struct TimerMainContainer: View {
                     },
                     onFinish: {
                         appState = .finishingTask
+                        completionPages = .summary
                     },
                     onCancel: {
                         appState = .finishingTask
+                        completionPages = .summary
                     },
                     pauseCount: $pauseCount
                 ) // Convert to seconds
