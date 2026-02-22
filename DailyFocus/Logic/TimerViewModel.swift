@@ -20,6 +20,16 @@ class TimerViewModel {
     
     /// Calculates the raw time in seconds and splits it into hours, minutes and seconds. Also does the formatting for CountDownTimer.
     /// > Note: Hours are not displayed if hours = 0.
+    ///
+    /// Formatting with hours:
+    /// ```
+    /// HH:MM:SS
+    /// ```
+    ///
+    /// Formatting without hours:
+    /// ```
+    /// MM:SS
+    /// ```
     var timeString: String {
         let hours = secondsRemaining / 3600
         let minutes = (secondsRemaining % 3600) / 60
@@ -33,6 +43,7 @@ class TimerViewModel {
     }
     
     /// Manages the ticking of the timer and ends the timer when secondsRemaining <= 0.
+    /// > Note: This decrements secondsRemaining and can also change AppState to .finished.
     func tic() {
         guard timerState == .running else { return }
         
@@ -45,7 +56,12 @@ class TimerViewModel {
     }
     
     /// Allows the user to resume the timer properly.
+    ///
+    /// This function serves as the primary entry point for the resuming the timer. It turns back timerState to .running, calculates the new finish time
+    ///
     /// > Note: This also updates the notification scheduling so it doesn't misalign when you pause.
+    ///
+    /// > Important: If the timer was paused for a long period of time, the notification must be resynced because it will likely have been cancelled.
     func resume() {
         timerState = .running
         notifications.scheduleNotification(secondsRemaining: secondsRemaining)

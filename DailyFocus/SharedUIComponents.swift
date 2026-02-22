@@ -76,6 +76,8 @@ struct Cross: View {
 }
 
 // MARK: LexendTexts
+
+/// Wrapper to ensure LexendRegularText can be used consistently.
 struct LexendRegularText: View {
     var text: String
     var size: CGFloat
@@ -86,6 +88,7 @@ struct LexendRegularText: View {
     }
 }
 
+/// Wrapper to ensure LexendMediumText can be used consistently.
 struct LexendMediumText: View {
     var text: String
     var size: CGFloat
