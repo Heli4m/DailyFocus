@@ -82,6 +82,23 @@ struct CountDownTimer: View {
         }
     }
     
+    
+    /// Synchronizes the timer by calculating elapsed time while the app is running in the background.
+    ///
+    /// Since iOS supports apps running in the background, this function calculates and updates the "lost time" by comparing the date the user left against the date the user reopened the app.
+    ///
+    /// - Parameters:
+    ///   - newPhase: The current phase of the app (active, inactive, background).
+    ///   - oldPhase: The previous phase of the app.
+    ///
+    /// ### Synchronization Logic
+    /// When the app enters the background, it saves the current time and date. Upon returning to the app, the following logic is applied:
+    /// ```
+    /// timePassed = CurrentDate - LastActiveDate
+    /// secondsRemaining = secondsRemaining - timePassed
+    /// ```
+    ///
+    /// > Note: If the calculated secondsRemaining goes below zero, the app automatically runs onFinish and changes AppState to .finished
     func updateTimer(newPhase: ScenePhase, oldPhase: ScenePhase) {
         if timeModel.timerState == .running {
             if newPhase == .background {

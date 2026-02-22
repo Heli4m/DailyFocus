@@ -74,27 +74,39 @@ struct Config {
 }
 
 enum AppState: String, Identifiable {
+    /// User is curently creating a new task or editing an existing task. This opens up TaskEditBar.
     case editingTask
+    /// User is currently opening a task. This opens up TaskUseBar.
     case openingTask
+    /// User is currently setting their focus time for the timer that they want to start. This opens up TaskSetTimeBar.
     case settingFocusTime
-    case timerTab
+    /// User is currently running a task. This opens up TimerMainContainer.
     case runningTask
+    /// User is currently completing the task. This opens up TaskCompleteViews.
     case finishingTask
     
     var id: String { self.rawValue }
 }
 
 enum TimerStates {
+    /// The timer is currently running.
     case running
+    /// The timer is paused. This opens up TimerStatusOverlay to cover the main CountDownTimer and pauses tic()
     case paused
+    /// The timer has been finsihed. This changes the AppState to .finishingTask.
     case finished
 }
 
 enum TabEnum {
+    /// User is currently on the home tab, or the landing page of the app.
     case home
+    /// User is currently on the timedtasks tab, which shows a list of timer tasks that can open CountDownTimer.
     case timedtasks
+    /// User is currently on the timer tab, which can either display the CountDownTimer or TimerNotSelectedView.
     case timer
+    /// User is currently on the checklist tab, which shows a list of tasks that don't necessarily require a timer.
     case checklist
+    /// User is currently on the settings tab.
     case settings
 }
 

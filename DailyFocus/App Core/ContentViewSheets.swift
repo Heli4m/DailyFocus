@@ -105,7 +105,13 @@ extension View {
             }
     }
     
-    /// This function makes sure the timer starts correctly and updates selectedTab & activeState
+    
+    /// Starts the timer and handles the UI transition.
+    /// - Parameters:
+    ///   - minutes: Duration of the task selected by the user
+    ///   - timeModel: Global TimerViewModel
+    ///   - selectedTab: A binding to switch the user to the .timer tab
+    ///   - activeState: A binding to switch the AppState to .activeState
     private func startTimerLogic(minutes: Int, timeModel: TimerViewModel, selectedTab: Binding<TabEnum>, activeState: Binding<AppState?>) {
         let totalSeconds = minutes * 60
             timeModel.secondsRemaining = totalSeconds

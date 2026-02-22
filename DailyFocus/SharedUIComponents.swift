@@ -15,6 +15,7 @@ struct ConfettiPiece: Identifiable {
 }
 
 // MARK: Confetti
+/// > Note: Timer runs every 0.02 seconds to not lag the processing but also provide a smooth animation. This is equivalent to about 50 fps.
 struct Confetti: View {
     @State private var Confettis: [ConfettiPiece] = []
     let containerSize: CGSize
@@ -146,6 +147,9 @@ struct LexendPauseShape: Shape {
     }
 }
 
+/// The main view of the priority dot structs, which puts everything together. This is used in TaskEditBar.
+///
+/// Uses matchedGeometryEffect in order to have a sliding background.
 struct PriorityDotMainView: View {
     @Binding var selectedButton: Int
     @Namespace private var animation

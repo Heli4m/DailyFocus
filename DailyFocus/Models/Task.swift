@@ -85,19 +85,6 @@ struct Task: View {
     }
 }
 
-struct SquishyButtonStyle: ButtonStyle {
-    @Binding var isPressed: Bool
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .onChange(of: configuration.isPressed) { oldValue, newValue in
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                   isPressed = newValue
-               }
-            }
-    }
-}
-
 #Preview {
     Task(width: 350, data: TaskData(
         name: "Mock Task",
