@@ -14,6 +14,7 @@ struct ConfettiPiece: Identifiable {
     let velocity: CGSize
 }
 
+// MARK: Confetti
 struct Confetti: View {
     @State private var Confettis: [ConfettiPiece] = []
     let containerSize: CGSize
@@ -60,6 +61,7 @@ struct Confetti: View {
     }
 }
 
+// MARK: Cross
 struct Cross: View {
     var body: some View {
         ZStack {
@@ -72,6 +74,7 @@ struct Cross: View {
     }
 }
 
+// MARK: LexendTexts
 struct LexendRegularText: View {
     var text: String
     var size: CGFloat
@@ -92,6 +95,7 @@ struct LexendMediumText: View {
     }
 }
 
+// MARK: Lexend Pause/Play Shapes
 // Designed with the same "smoothness" as Lexend Medium
 struct LexendPlayShape: Shape {
     var cornerRadius: CGFloat = 10 // Added a property for flexibility

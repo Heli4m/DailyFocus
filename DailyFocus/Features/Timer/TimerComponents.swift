@@ -6,6 +6,7 @@ import SwiftUI
 import Combine
 import UserNotifications
 
+// MARK: CountDownTimer
 struct CountDownTimer: View {
     @Bindable var timeModel: TimerViewModel
     @Environment(\.scenePhase) var scenePhase
@@ -107,6 +108,7 @@ struct CountDownTimer: View {
     }
 }
 
+// MARK: PauseTimer
 struct PauseTimer: View {
     let onResume: () -> Void
     let onReturn: () -> Void
@@ -170,6 +172,7 @@ struct PauseTimer: View {
     }
 }
 
+// MARK: TimerStatusOverlay
 struct TimerStatusOverlay: View {
     var timeModel: TimerViewModel
     let containerSize: CGSize
@@ -195,6 +198,7 @@ struct TimerStatusOverlay: View {
     }
 }
 
+// MARK: TimerCircleView
 struct TimerCircleView: View {
     let secondsRemaining: Int
     let totalSeconds: Int
@@ -216,6 +220,7 @@ struct TimerCircleView: View {
     }
 }
 
+// MARK: TimerNotSelectedView
 struct TimerNotSelectedView: View {
     var body: some View {
         ZStack (alignment: .center) {

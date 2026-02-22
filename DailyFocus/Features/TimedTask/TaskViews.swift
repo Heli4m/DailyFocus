@@ -4,6 +4,7 @@
 import Foundation
 import SwiftUI
 
+// MARK: NewTaskButton
 struct NewTaskButton: View {
     let action: () -> Void
     
@@ -35,7 +36,7 @@ struct NewTaskButton: View {
     }
 }
 
-
+// MARK: TaskSetTimeBar
 struct TaskSetTimeBar: View {
     @Environment(\.dismiss) var dismiss
     @Namespace private var animation
@@ -144,6 +145,7 @@ struct TaskSetTimeBar: View {
         }    }
 }
 
+// MARK: TaskUseBar
 struct TaskUseBar: View {
     @Environment(\.dismiss) var dismiss
     let data: TaskData
@@ -223,6 +225,7 @@ struct TaskUseBar: View {
     }
 }
 
+// MARK: TaskEditBar
 struct TaskEditBar: View {
     
     // VARIABLES & INIT
@@ -293,7 +296,8 @@ struct TaskEditBar: View {
                     
                     Spacer()
                     
-                    Button { // done button
+                    // done button
+                    Button {
                         if !selectedtaskName.isEmpty && selectedDuration > 0 {
                             if let existingTask = existingTask {
                                 let updatedTask = TaskData(
@@ -309,11 +313,11 @@ struct TaskEditBar: View {
                                     name: selectedtaskName,
                                     time: selectedDuration,
                                     priority: selectedPriority
-                                ) // creates a new task based on the TaskData struct
-                                onCreate(newTask) // shoves the newTask into oncreate function so that it can be processed elsewhere
+                                )
+                                onCreate(newTask)
                                 Haptics.success()
                             }
-                            dismiss() // closes the .sheet
+                            dismiss()
                         }
                     } label: {
                         RoundedRectangle(cornerRadius: Config.Layout.mainCornerRadius)

@@ -4,11 +4,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    /// activeState holds the current state of the app through the AppState enum, which determines .sheets and timers.
     @State private var activeState: AppState? = nil
+    /// TaskList holds the list of all the tasks that have been created as well as all of its data based on TaskData struct.
     @State private var TaskList: [TaskData] = []
+    /// hasAppeared holds the boolean to determine the appearance of TaskList
     @State private var hasAppeared: Bool = false
+    /// selectedTab holds the current tab that the user is on, also updates TabsBar
     @State private var selectedTab: TabEnum = .home
+    /// timeModel stores the calculations related to time. secondsRemaining is most used.
     @State private var timeModel = TimerViewModel(initialSeconds: 0)
+    /// completionPage holds rhe current TaskCompleteView and displays them in order
     @State private var completionPage: TaskCompletePages? = nil
     
     @State private var pauseCount: Int = 0
@@ -19,6 +25,7 @@ struct ContentView: View {
     
     @State private var sparklePulse: Bool = false
     
+    /// Checks for when to show and hide TabsBar
     private var isShowingTabBar: Bool {
         !(selectedTab == .timer && activeState == .runningTask)
     }
@@ -128,12 +135,14 @@ struct ContentView: View {
         }
     }
     
-    private func deleteTask( _ task: TaskData) {
+    /// This function searches for an item where id matches task.id and removes it from TaskList.
+     private func deleteTask( _ task: TaskData) {
         if let index = TaskList.firstIndex(where: { $0.id == task.id }) {
             TaskList.remove(at: index)
         }
     }
     
+    /// This function changes active state to a chosen state with animation.
     private func goTo (_ next: AppState) {
         withAnimation {
             activeState = next

@@ -14,7 +14,7 @@ extension View {
         selectedTab: Binding<TabEnum>
     ) -> some View {
         self
-            // EDIT SHEET
+            // MARK: EDIT SHEET
             .sheet(isPresented: Binding(
                 get: { activeState.wrappedValue == .editingTask },
                 set: { if !$0 {
@@ -43,7 +43,7 @@ extension View {
                 .presentationBackground(Color(Config.Colors.background))
             }
             
-            // USE BAR SHEET
+            // MARK: USE BAR SHEET
             .sheet(isPresented: Binding(
                 get: { activeState.wrappedValue == .openingTask },
                 set: { if !$0 { activeState.wrappedValue = nil }}
@@ -78,7 +78,7 @@ extension View {
                 }
             }
             
-            // SET TIME SHEET
+            // MARK: SET TIME SHEET
             .sheet(isPresented: Binding(
                 get: { activeState.wrappedValue == .settingFocusTime },
                 set: { if !$0 { activeState.wrappedValue = nil }}
@@ -105,6 +105,7 @@ extension View {
             }
     }
     
+    /// This function makes sure the timer starts correctly and updates selectedTab & activeState
     private func startTimerLogic(minutes: Int, timeModel: TimerViewModel, selectedTab: Binding<TabEnum>, activeState: Binding<AppState?>) {
         let totalSeconds = minutes * 60
             timeModel.secondsRemaining = totalSeconds
